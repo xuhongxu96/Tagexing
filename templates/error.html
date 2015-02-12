@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>{include 'library/header.html' title='错误提示'}
+</head>
+<body>
+	<script type="text/javascript">
+  wx.config({
+      debug: false,
+      appId: '{$js_sign["appid"]}', // 必填，公众号的唯一标识
+      timestamp: {$js_sign["timestamp"]}, // 必填，生成签名的时间戳，切记时间戳是整数型，别加引号
+      nonceStr: '{$js_sign["noncestr"]}', // 必填，生成签名的随机串
+      signature: '{$js_sign["signature"]}', // 必填，签名，见附录1
+      jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+        'translateVoice',
+        'startRecord',
+        'stopRecord',
+        'onRecordEnd',
+        'playVoice',
+        'pauseVoice',
+        'stopVoice',
+        'uploadVoice',
+        'downloadVoice',
+        'chooseImage',
+        'previewImage',
+        'uploadImage',
+        'downloadImage',
+        'getNetworkType',
+        'openLocation',
+        'getLocation',
+        'hideOptionMenu',
+        'showOptionMenu',
+        'closeWindow',
+        'scanQRCode',
+        'chooseWXPay',
+        'openProductSpecificView',
+        'addCard',
+        'chooseCard',
+        'openCard'
+      ]
+  });
+</script>
+	<div data-role="page" id="errPage">
+		<div data-role="content">
+			<a href="javascript:wx.closeWindow();"
+				class="ui-shadow-icon ui-btn ui-shadow ui-corner-all ui-icon-forbidden ui-btn-icon-left">错误：{$error}</a>
+		</div>
+	</div>
+</body>
+</html>

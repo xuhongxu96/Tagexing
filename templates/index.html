@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>{include 'library/header.html' title='个人中心'}
+</head>
+<body>
+	<div data-role="page" id="registerPage">
+		<div data-role="header">
+			<h1>个人中心</h1>
+			<a href="#helpPage"
+				class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-star">帮助</a>
+		</div>
+		<div role="main" class="ui-content">
+			<h3>欢迎 {$userInfo['name']}！</h3>
+			<ul data-role="listview">
+				<li data-role="list-divider">状态信息</li>
+				<li>状态：{$state}</li>
+				<li data-role="list-divider">等级信息</li>
+				<li>信用值：{$userInfo['score']}</li>
+				<li>等级：{$rank['name']}</li>
+				<li>最大借车时长：{$rank['maxTime']} 小时</li>
+				<li data-role="list-divider">车站信息</li>
+				<!-- {foreach $stop as $item} -->
+				<li>{$item['name']}：有{$item['bikeCount']}辆车、{$item['stopCount']
+					- $item['bikeCount']}个空车位</li>
+				<!-- {/foreach} -->
+			</ul>
+		</div>
+		<div data-role="footer" style="overflow: hidden;"
+			data-position="fixed" data-tap-toggle="false">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#" class="ui-btn ui-shadow ui-icon-tag ui-btn-icon-top">我要借车</a></li>
+					<li><a href="#" class="ui-btn ui-shadow ui-icon-phone ui-btn-icon-top">我要报修</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

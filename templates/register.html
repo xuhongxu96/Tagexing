@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>{include 'library/header.html' title='用户认证'}
+</head>
+<body>
+	<div data-role="page" id="registerPage">
+		<div data-role="header">
+			<h1>用户认证</h1>
+			<a href="#infoPage"
+				class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-info">
+				项目说明 </a>
+		</div>
+		<!-- /header -->
+		<div role="main" class="ui-content">
+			<!-- {if $name} -->
+			<h3>欢迎新用户，请耐心等待认证，或修改内容。</h3>
+			<!-- {else} -->
+			<h3>欢迎新用户，使用前请先认证！</h3>
+			<h4>用户协议</h4>
+			<ol>
+				<li>您……</li>
+				<li>您还要……</li>
+				<li>您必须……</li>
+				<li>出了事你承担</li>
+			</ol>
+			<p>提交认证即代表您同意该协议</p>
+			<!-- {/if} -->
+			<!-- {if not $pic} -->
+			<p style="font-weight: bold;color: #D22;">请从 聊天窗口 发送有效证件照片</p>
+			<!-- {/if} -->
+			<!-- {if $error} -->
+			<h4>错误： {$error}</h4>
+			<!-- {/if} -->
+			<form method="post" action="main.php?a=register"
+				onsubmit="return validateForm(event);">
+				<label for="name">姓名：</label> <input type="text" name="name"
+					id="name" placeholder="张三" value="{$name}" /> <label for="mobile">手机号：</label>
+				<input type="tel" name="mobile" id="mobile"
+					placeholder="17888888888" value="{$mobile}" /> <label
+					for="inviterName">邀请人姓名：</label> <input type="text"
+					name="inviterName" id="inviterName" placeholder="李四"
+					value="{$inviterName}" /> <label for="inviterMobile">邀请人手机号：</label>
+				<input type="tel" name="inviterMobile" id="inviterMobile"
+					placeholder="17666666666" value="{$inviterMobile}" /> <label
+					for="info">认证个人陈述：</label>
+				<textarea id="info" name="info" placeholder="这个项目真不错，我很感兴趣，请同意我加入！"
+					cols="" rows="">{$info}</textarea>
+				<!-- {if $pic} -->
+				<p style="font-weight: bold;">请从 聊天窗口 发送照片修改</p>
+				<img src="{$pic}" style="max-width: 80%;" alt="照片不合法" />
+				<!-- {else} -->
+				<p style="font-weight: bold;">请从 聊天窗口 发送有效证件照片</p>
+				<!-- {/if} -->
+				<button type="submit">提交</button>
+			</form>
+		</div>
+		<!-- /content -->
+	</div>
+	<div data-role="page" id="infoPage">
+		<div data-role="header">
+			<h1>项目说明</h1>
+			<a href="#registerPage" data-rel="back"
+				class="ui-btn-left ui-alt-icon ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"
+				data-role="button" role="button">返回</a>
+		</div>
+		<div data-role="ui-content">
+			<div class="ui-bar">
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>
