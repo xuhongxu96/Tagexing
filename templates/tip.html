@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>{include 'library/header.html' title='错误提示'}
+<head>{include 'library/header.html' title='提示'}
 </head>
 <body>
 	<div data-role="page" id="errPage">
 	<div data-role="header">
-			<h1>错误提示</h1>
+			<h1>提示</h1>
 		</div>
 		<div role="main" class="ui-content">
-			<p style="color:red;">{$error}</p>
+			<p>{$tip}</p>
 		</div>
 		<div data-role="footer" style="overflow: hidden;"
 			data-position="fixed" data-tap-toggle="false">
 			<div data-role="navbar">
 				<ul>
-					<li><a href="#" data-rel="back"
+					<li><a href="main.php?q={$random}"
 						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
-						data-role="button" role="button">返回</a></li>
+						data-role="button" role="button">返回主页</a></li>
 				</ul>
 			</div>
 		</div>

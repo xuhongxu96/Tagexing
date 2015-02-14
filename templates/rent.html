@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>{include 'library/header.html' title='我要借车'}
+</head>
+<body>
+	<div data-dom-cache="false" data-role="page" id="rentPage">
+		<div data-role="header">
+			<h1>我要借车</h1>
+		</div>
+		<div role="main" class="ui-content">
+			<h3>请选择车站</h3>
+			<ul data-role="listview" data-inset="true" data-filter="true">
+				<!-- {foreach $stop as $item} -->
+				<!-- {if $item['bikeCount']} -->
+				<li><a href="main.php?a=rentBike&s={$item['ID']}">{$item['name']}<span class="ui-li-count">{$item['bikeCount']}</span></a></li>
+				<!-- {else} -->
+				<li><a href="#" class="ui-disabled">{$item['name']}<span
+						class="ui-li-count">{$item['bikeCount']}</span></a></li>
+				<!-- {/if} -->
+				<!-- {/foreach} -->
+			</ul>
+		</div>
+		<div data-role="footer" style="overflow: hidden;"
+			data-position="fixed" data-tap-toggle="false">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#" data-rel="back"
+						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+						data-role="button" role="button">返回</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1096,6 +1096,7 @@ class Wechat
 		$sContent = curl_exec($oCurl);
 		$aStatus = curl_getinfo($oCurl);
 		curl_close($oCurl);
+		
 		if(intval($aStatus["http_code"])==200){
 			return $sContent;
 		}else{
@@ -1114,7 +1115,10 @@ class Wechat
 		//TODO: set cache implementation
 		$db = new DB ();
 		$db->connect ();
-		$db->setCache($cachename, $value, $expired);
+		if ($db->setCache($cachename, $value, $expired)) {
+			$db->disconnect();
+			return true;
+		}
 		$db->disconnect();
 		return false;
 	}
@@ -1128,7 +1132,11 @@ class Wechat
 		//TODO: get cache implementation\
 		$db = new DB ();
 		$db->connect ();
-		$db->getCache($cachename);
+		if ($ret = $db->getCache($cachename)) {
+			$db->disconnect();
+			return $ret['value'];
+		}
+		
 		$db->disconnect();
 		return false;
 	}
@@ -1142,7 +1150,10 @@ class Wechat
 		//TODO: remove cache implementation
 		$db = new DB ();
 		$db->connect ();
-		$db->removeCache($cachename);
+		if ($db->removeCache($cachename)){
+			$db->disconnect();
+			return true;
+		}
 		$db->disconnect();
 		return false;
 	}
@@ -1446,6 +1457,7 @@ class Wechat
 			if (!$json || !empty($json['errcode'])) {
 				$this->errCode = $json['errcode'];
 				$this->errMsg = $json['errmsg'];
+				if ($this->errCode == 0) return true;
 				return false;
 			}
 			return true;

@@ -3,7 +3,7 @@
 <head>{include 'library/header.html' title='个人中心'}
 </head>
 <body>
-	<div data-role="page" id="registerPage">
+	<div data-dom-cache="false" data-role="page" id="indexPage">
 		<div data-role="header">
 			<h1>个人中心</h1>
 			<a href="#helpPage"
@@ -11,13 +11,31 @@
 		</div>
 		<div role="main" class="ui-content">
 			<h3>欢迎 {$userInfo['name']}！</h3>
-			<ul data-role="listview">
+			<ul data-role="listview" data-inset="true">
 				<li data-role="list-divider">状态信息</li>
 				<li>状态：{$state}</li>
+				<!-- {if $userInfo['comment']} -->
+				<li>留言：{$userInfo['comment']}</li>
+				<!-- {/if} -->
+				<!-- {if $userInfo['state'] eq 1 and $pwd} -->
+				<li>锁车密码：{$pwd}</li>
+				<!-- {else if $userInfo['state'] eq 2} -->
+				<li>开锁密码：{$rentInfo['unlockPWD']}</li>
+				<!-- {if $over} -->
+				<li style="color:red;">已超时，请尽快还车！</li>
+				<li style="color:red;">超出时长：{$restTime}</li>
+				<!-- {else} -->
+				<li>剩余时长：{$restTime}</li>
+				<!-- {/if} -->
+				<li>当前时间：{$now|date_format:"%m-%d %H:%M"}</li>
+				<li>借车时间：{$rentInfo['rentTime']|date_format:"%m-%d %H:%M"}</li>
+				<li>还车期限：{$returnTime|date_format:"%m-%d %H:%M"}</li>
+				<!-- {/if} -->
 				<li data-role="list-divider">等级信息</li>
 				<li>信用值：{$userInfo['score']}</li>
 				<li>等级：{$rank['name']}</li>
 				<li>最大借车时长：{$rank['maxTime']} 小时</li>
+				<li>累计时长：{$userInfo['timeAmount']}</li>
 				<li data-role="list-divider">车站信息</li>
 				<!-- {foreach $stop as $item} -->
 				<li>{$item['name']}：有{$item['bikeCount']}辆车、{$item['stopCount']
@@ -25,17 +43,53 @@
 				<!-- {/foreach} -->
 			</ul>
 		</div>
+		<!-- {if $userInfo['state'] neq 3} -->
 		<div data-role="footer" style="overflow: hidden;"
 			data-position="fixed" data-tap-toggle="false">
 			<div data-role="navbar">
 				<ul>
-					<li><a href="#" class="ui-btn ui-shadow ui-icon-tag ui-btn-icon-top">我要借车</a></li>
-					<li><a href="#" class="ui-btn ui-shadow ui-icon-phone ui-btn-icon-top">我要报修</a></li>
+				<!-- {if $userInfo['state'] eq 1} -->
+					<li><a href="main.php?a=rent&q={$random}"
+						class="ui-btn ui-shadow ui-icon-tag ui-btn-icon-top">我要借车</a></li>
+						<!-- {else if $userInfo['state'] eq 2} -->
+						<li><a href="main.php?a=return&q={$random}"
+						class="ui-btn ui-shadow ui-icon-tag ui-btn-icon-top">我要还车</a></li>
+						<li><a href="main.php?a=accident&q={$random}"
+						class="ui-btn ui-shadow ui-icon-tag ui-btn-icon-top">意外上报</a></li>
+						<!-- {/if} -->
+				</ul>
+			</div>
+		</div>
+		<!-- {/if} -->
+	</div>
+	<div data-role="page" id="helpPage">
+		<div data-role="header">
+			<h1>帮助</h1>
+			<a href="#indexPage" data-rel="back"
+				class="ui-btn-left ui-alt-icon ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"
+				data-role="button" role="button">返回</a>
+		</div>
+		<div data-role="ui-content">
+			<div class="ui-bar">
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+				<p>我们是踏鸽行 校园公共自行车团队~</p>
+			</div>
+		</div>
+		<div data-role="footer" style="overflow: hidden;"
+			data-position="fixed" data-tap-toggle="false">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#" data-rel="back"
+						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+						data-role="button" role="button">返回</a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
-
 
 </body>
 </html>

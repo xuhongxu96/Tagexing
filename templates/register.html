@@ -16,6 +16,9 @@
 			<h3>欢迎新用户，请耐心等待认证，或修改内容。</h3>
 			<!-- {else} -->
 			<h3>欢迎新用户，使用前请先认证！</h3>
+			<!-- {if $comment} -->
+			<p style="color:red;">留言：{$userInfo['comment']}</p>
+			<!-- {/if} -->
 			<h4>用户协议</h4>
 			<ol>
 				<li>您……</li>
@@ -26,7 +29,7 @@
 			<p>提交认证即代表您同意该协议</p>
 			<!-- {/if} -->
 			<!-- {if not $pic} -->
-			<p style="font-weight: bold;color: #D22;">请从 聊天窗口 发送有效证件照片</p>
+			<p style="font-weight: bold; color: #D22;">请从 聊天窗口 发送有效证件照片</p>
 			<!-- {/if} -->
 			<!-- {if $error} -->
 			<h4>错误： {$error}</h4>
@@ -73,7 +76,17 @@
 				<p>我们是踏鸽行 校园公共自行车团队~</p>
 			</div>
 		</div>
+		<div data-role="footer" style="overflow: hidden;"
+			data-position="fixed" data-tap-toggle="false">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#" data-rel="back"
+						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+						data-role="button" role="button">返回</a></li>
+				</ul>
+			</div>
+		</div>
 	</div>
-	
+
 </body>
 </html>

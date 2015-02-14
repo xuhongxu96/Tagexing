@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>{include 'library/header.html' title='我要还车'}
+</head>
+<body>
+	<div data-dom-cache="false" data-role="page" id="returnConfirmPage">
+		<div data-role="header">
+			<h1>还至 {$stop['name']} 车站</h1>
+		</div>
+		<div role="main" class="ui-content">
+		<h3>请输入车站号 </h3>
+			<form action="main.php?a=returnIt&s={$stop['ID']}" method="post">
+			<label for="code" class="ui-hidden-accessible">车站号</label>
+			<input type="text" id="code" name="code" />
+			<button type="submit">确认还车</button>
+			</form>
+		</div>
+		<div data-role="footer" style="overflow: hidden;"
+			data-position="fixed" data-tap-toggle="false">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#" data-rel="back"
+						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+						data-role="button" role="button">返回</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

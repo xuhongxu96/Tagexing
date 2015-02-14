@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>{include 'library/header.html' title='报告问题'}
+</head>
+<body>
+	<div data-role="page" id="rentPage">
+		<div data-role="header">
+			<h1>报告问题</h1>
+		</div>
+		<div role="main" class="ui-content">
+			<form action="main.php?a=submitReport" method="post">
+				<fieldset data-role="controlgroup">
+					<legend>问题类型</legend>
+					<input type="radio" name="brokenType" id="brokenType-a" value="1"
+						checked="checked" /> <label for="brokenType-a">车锁损坏</label> <input
+						type="radio" name="brokenType" id="brokenType-b" value="2" /> <label
+						for="brokenType-b">车辆损坏</label> 
+				</fieldset>
+				<label for="description">问题描述</label>
+				<textarea id="description" name="desciption" rows="" cols=""></textarea>
+				<button type="submit">提交</button>
+			</form>
+		</div>
+		<div data-role="footer" style="overflow: hidden;"
+			data-position="fixed" data-tap-toggle="false">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="main.php?q={$random}"
+						class="ui-btn ui-shadow ui-btn-icon-top ui-icon-back"
+						data-role="button" role="button">回到主页</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
