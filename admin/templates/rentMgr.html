@@ -1,0 +1,110 @@
+{include 'adminHeader.html'}
+
+
+<h1>借车信息管理</h1>
+<!-- {if $page neq -1} -->
+	<nav>
+		<ul class="pagination">
+			<li {if $index eq 0}class="disabled"{/if}><a {if $index
+				neq 0}href="index.php?a=rentMgr&i={$index-1}"{/if}><span
+					aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>
+			{for $i=0 to $page - 1}
+			<li {if $i eq $index}class="active"{/if}><a
+				href="index.php?a=rentMgr&i={$i}">{$i + 1}</a></li> {/for}
+			<li {if $index eq $page - 1}class="disabled"{/if}><a {if $index
+				neq $page - 1}href="index.php?a=rentMgr&i={$index+1}"{/if}><span
+					aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>
+		</ul>
+
+	</nav>
+	
+	<!-- {/if} -->
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>车辆</th>
+				<th>用户</th>
+				<th>借车时间</th>
+				<th>还车时间</th>
+				<th>实际 / 最大借车时长</th>
+				<th>解锁密码</th>
+				<th>锁车密码</th>
+				<th>损坏类型</th>
+				<th>损坏描述</th>
+				<th>借车车站</th>
+				<th>还车车站</th>
+				<th>备注</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- {foreach $rent as $item} -->
+			<tr>
+				<td>{$item['ID']}</td>
+				<td>{$item['bikeName']}</td>
+				<td><a href="index.php?a=userMgr&index={$item['userID']}">{$item['userName']}</a></td>
+				<td>{$item['rentTime']}</td>
+				<td>{$item['returnTime']}</td>
+				<td>{$item['timeDiff']|date_format:"%H:%M"} / {$item['maxTime']}:00</td>
+				<td>{$item['unlockPWD']}</td>
+				<td>{$item['lockPWD']}</td>
+				<td>{if $item['brokenType'] eq 1}车锁损坏{else if $item['brokenType'] eq 2}车辆损坏{else if $item['brokenType'] neq 0}参见备注{/if}</td>
+				<td>{$item['brokenInfo']}</td>
+				<td>{$item['stopName1']}</td>
+				<td>{$item['stopName2']}</td>
+				<td><input class="form-control" id="edit{$item['ID']}Edit" type="text" value="{$item['comment']}" /></td>
+				<td><a class="btn btn-default change"
+					href="#" id="edit{$item['ID']}">修改</a>
+			</tr>
+			<!-- {/foreach} -->
+		</tbody>
+	</table>
+<!-- {if $page neq -1} -->
+	<nav>
+		<ul class="pagination">
+			<li {if $index eq 0}class="disabled"{/if}><a {if $index
+				neq 0}href="index.php?a=rentMgr&i={$index-1}"{/if}><span
+					aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>
+			{for $i=0 to $page - 1}
+			<li {if $i eq $index}class="active"{/if}><a
+				href="index.php?a=rentMgr&i={$i}">{$i + 1}</a></li> {/for}
+			<li {if $index eq $page - 1}class="disabled"{/if}><a {if $index
+				neq $page - 1}href="index.php?a=rentMgr&i={$index+1}"{/if}><span
+					aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>
+		</ul>
+	</nav>
+	<!-- {else} -->
+	<a href="javascript:history.go(-1);" class="btn btn-default">返回</a>
+	<!-- {/if} -->
+</div>
+<!-- /container -->
+<script type="text/javascript">
+$(document).ready(function (){
+	$(".change").click(function (){
+		var text = $("#" + $(this).attr("id") + "Edit").val();
+		var id = $(this).attr("id").substr(4);
+		$.ajax({
+			url: "index.php?a=editRent",
+			type: "POST",
+			data: {
+				id: id,
+				cmt: text
+			},
+			success: function (data) {
+				if (data) {
+					alert(data);
+				} else {
+					alert("修改成功！");
+				}
+			},
+			error : function () {
+				alert("修改失败！");
+			}
+		});
+		return false;
+	});
+});
+</script>
+</body>
+</html>

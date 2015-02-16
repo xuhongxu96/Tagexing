@@ -1,5 +1,4 @@
 <?php
-require_once './db.php';
 /**
  *	微信公众平台PHP-SDK, 官方API部分
  *  @author  dodge <dodgepudding@gmail.com>
@@ -1115,6 +1114,7 @@ class Wechat
 		//TODO: set cache implementation
 		$db = new DB ();
 		$db->connect ();
+		$this->log($cachename);
 		if ($db->setCache($cachename, $value, $expired)) {
 			$db->disconnect();
 			return true;
@@ -1173,14 +1173,15 @@ class Wechat
 		    $this->access_token=$token;
 		    return $this->access_token;
 		}
-
+		
 		$authname = 'wechat_access_token'.$appid;
 		if ($rs = $this->getCache($authname))  {
 			$this->access_token = $rs;
 			return $rs;
 		}
-
+		$this->log("checkNewAuth");
 		$result = $this->http_get(self::API_URL_PREFIX.self::AUTH_URL.'appid='.$appid.'&secret='.$appsecret);
+		$this->log("newAuth:".$result);
 		if ($result)
 		{
 			$json = json_decode($result,true);

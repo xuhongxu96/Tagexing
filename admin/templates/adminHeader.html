@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="../js/jquery-2.1.3.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="../js/bootstrap.min.js"></script>
+<title>校园公共自行车 后台管理</title>
+</head>
+<body style="padding-top: 70px;">
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">导航</span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">校园公共自行车</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li {if $mgrtype eq 'index'} class="active"{/if}><a
+						href="index.php">后台主页</a></li>
+					<!-- {if $systemMgr or $adminMgr} -->
+					<li
+						class="dropdown{if $mgrtype eq 'adminMgr' or $mgrtype eq 'systemMgr'} active{/if}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"
+						role="button" aria-expanded="false">后台管理<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+						<!-- {if $adminMgr} -->
+							<li {if $mgrtype eq 'adminMgr'} class="active"{/if}><a
+								href="index.php?a=adminMgr">志愿者管理</a></li>
+								<!-- {/if}{if $systemMgr} -->
+							<li {if $mgrtype eq 'systemMgr'} class="active"{/if}><a href="index.php?a=systemMgr">系统管理</a></li>
+							<!-- {/if} -->
+						</ul>
+					</li>
+					<!-- {/if} -->
+					<!-- {if $bikeMgr} -->
+					<li {if $mgrtype eq 'bikeMgr'} class="active"{/if}><a
+						href="index.php?a=bikeMgr">自行车管理</a></li>
+					<!-- {/if} -->
+					<!-- {if $rankMgr} -->
+					<li {if $mgrtype eq 'rankMgr'} class="active"{/if}><a
+						href="index.php?a=rankMgr">等级管理</a></li>
+					<!-- {/if} -->
+					<!-- {if $rentMgr} -->
+					<li {if $mgrtype eq 'rentMgr'} class="active"{/if}><a
+						href="index.php?a=rentMgr">借车信息管理</a></li>
+					<!-- {/if} -->
+					<!-- {if $stopMgr} -->
+					<li {if $mgrtype eq 'stopMgr'} class="active"{/if}><a
+						href="index.php?a=stopMgr">车站管理</a></li>
+					<!-- {/if} -->
+					<!-- {if $userMgr} -->
+					<li {if $mgrtype eq 'userMgr'} class="active"{/if}><a href="index.php?a=userMgr">用户管理</a></li>
+					<!-- {/if} -->
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" style="color: black; cursor: default;">欢迎
+							{$name}</a></li>
+					<li><a href="sessionDown.php">退出</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- {if $mgrtype eq 'userMgr' or $mgrtype eq 'rentMgr'} -->
+	<div class="container-fluid">
+	<!-- {else} -->
+	<div class="container">
+	<!-- {/if} -->

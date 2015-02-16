@@ -54,8 +54,12 @@
 						<!-- {else if $userInfo['state'] eq 2} -->
 						<li><a href="main.php?a=return&q={$random}"
 						class="ui-btn ui-shadow ui-icon-tag ui-btn-icon-top">我要还车</a></li>
+						<!-- {if $report} -->
+						<li><a href="main.php?a=report"
+						class="ui-btn ui-shadow ui-icon-phone ui-btn-icon-top">借车问题</a></li>
+						<!-- {/if} -->
 						<li><a href="main.php?a=accident&q={$random}"
-						class="ui-btn ui-shadow ui-icon-tag ui-btn-icon-top">意外上报</a></li>
+						class="ui-btn ui-shadow ui-icon-phone ui-btn-icon-top">行程意外</a></li>
 						<!-- {/if} -->
 				</ul>
 			</div>

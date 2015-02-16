@@ -1,0 +1,88 @@
+{include 'adminHeader.html'}
+
+
+<h1>志愿者管理</h1>
+	<a class="btn btn-primary" href="index.php?a=addAdmin">添加新志愿者</a>
+	<nav>
+		<ul class="pagination">
+			<li {if $index eq 0}class="disabled"{/if}><a {if $index
+				neq 0}href="index.php?a=adminMgr&i={$index-1}"{/if}><span
+					aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>
+			{for $i=0 to $page - 1}
+			<li {if $i eq $index}class="active"{/if}><a
+				href="index.php?a=adminMgr&i={$i}">{$i + 1}</a></li> {/for}
+			<li {if $index eq $page - 1}class="disabled"{/if}><a {if $index
+				neq $page - 1}href="index.php?a=adminMgr&i={$index+1}"{/if}><span
+					aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>
+		</ul>
+
+	</nav>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>用户名</th>
+				<th>密码</th>
+				<th>权限</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- {foreach $admins as $item} -->
+			<tr>
+				<td>{$item['ID']}</td>
+				<td>{$item['name']}</td>
+				<td>{$item['pwd']}</td>
+				<td>
+					<ul>
+						<!-- {if $item['limit'] & 1} -->
+						<li>自行车管理</li>
+						<!-- {/if} -->
+						<!-- {if $item['limit'] & 2} -->
+						<li>等级管理</li>
+						<!-- {/if} -->
+						<!-- {if $item['limit'] & 4} -->
+						<li>借车信息管理</li>
+						<!-- {/if} -->
+						<!-- {if $item['limit'] & 8} -->
+						<li>车站管理</li>
+						<!-- {/if} -->
+						<!-- {if $item['limit'] & 16} -->
+						<li>用户管理</li>
+						<!-- {/if} -->
+						<!-- {if $item['limit'] & 32} -->
+						<li>志愿者管理</li>
+						<!-- {/if} -->
+						<!-- {if $item['limit'] & 64} -->
+						<li>系统管理</li>
+						<!-- {/if} -->
+					</ul>
+				</td>
+				<td><a class="btn btn-default"
+					href="index.php?a=editAdmin&id={$item['ID']}">编辑</a><a
+					class="btn btn-danger" href="index.php?a=delAdmin&id={$item['ID']}"
+					onclick="return confirm('您确定要删除{$item['name']}吗？');">删除</a></td>
+			</tr>
+			<!-- {/foreach} -->
+		</tbody>
+	</table>
+
+	<nav>
+		<ul class="pagination">
+			<li {if $index eq 0}class="disabled"{/if}><a {if $index
+				neq 0}href="index.php?a=adminMgr&i={$index-1}"{/if}><span
+					aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>
+			{for $i=0 to $page - 1}
+			<li {if $i eq $index}class="active"{/if}><a
+				href="index.php?a=adminMgr&i={$i}">{$i + 1}</a></li> {/for}
+			<li {if $index eq $page - 1}class="disabled"{/if}><a {if $index
+				neq $page - 1}href="index.php?a=adminMgr&i={$index+1}"{/if}><span
+					aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>
+		</ul>
+	</nav>
+	<a class="btn btn-primary" href="index.php?a=addAdmin">添加新志愿者</a>
+</div>
+<!-- /container -->
+
+</body>
+</html>

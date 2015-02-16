@@ -1,0 +1,15 @@
+{include 'adminHeader.html'}
+
+
+<h1>系统管理</h1>
+<!-- {if $longtime} -->
+<a href="index.php?a=setLong&o=0" class="btn btn-primary active" onclick="return confirm('确定禁用活动时期借车时长？');">禁用活动时期借车时长</a>
+<!-- {else} -->
+<a href="index.php?a=setLong&o=1" class="btn btn-default" onclick="return confirm('确定启用活动时期借车时长？');">启用活动时期借车时长</a>
+<!-- {/if} -->
+<a href="index.php?a=newTerm" class="btn btn-warning" onclick="return confirm('确定开始新学期并刷新用户信用值？');">开始新学期并刷新信用值</a>
+</div>
+<!-- /container -->
+
+</body>
+</html>

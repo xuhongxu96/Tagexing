@@ -1,0 +1,29 @@
+{include 'adminHeader.html'}
+
+
+	<h1>编辑车站信息</h1>
+	<form action="index.php?a=submitEditStop" method="post">
+		<input type="hidden" name="id" value="{$stopInfo['ID']}" />
+		<div class="form-group">
+			<label for="name">名称</label> <input type="text"
+				class="form-control" name="name" id="name"
+				value="{$stopInfo['name']}" />
+		</div>
+		<div class="form-group">
+			<label for="stopCount">容纳量</label> <input type="text"
+				class="form-control" name="stopCount" id="stopCount"
+				value="{$stopInfo['stopCount']}" />
+		</div>
+		<div class="form-group">
+			<label for="code">车站码</label>
+				<input type="text" class="form-control" name="code" id="code"
+					value="{$stopInfo['code']}" />
+		</div>
+		<button type="submit" class="btn btn-primary">提交</button>
+		<a href="javascript:history.go(-1);" class="btn btn-default">返回</a>
+	</form>
+</div>
+<!-- /container -->
+
+</body>
+</html>

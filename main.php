@@ -24,8 +24,9 @@ function showTip($smarty, $tip, $db) {
 	die ();
 }
 if (WX_DEBUG == '1') {
-	$openid = "xuhongxu96justforfun";
-	// $openid = "hahahahahaha";
+	//$openid = "xuhongxu96justforfun";
+	$openid = "new";
+	 $openid = "hahahahahaha";
 } else {
 	if (! isset ( $_GET ['code'] ) && ! isset ( $_SESSION ['openid'] )) { // 未进行微信OAuth2.0认证
 		showError ( $smarty, '请通过微信公众号进入踏鸽行操作页面！', $db );
@@ -52,7 +53,7 @@ function showRegister($smarty, $userInfo, $db) {
 	$smarty->assign ( 'mobile', $userInfo ['mobile'] );
 	$smarty->assign ( 'comment', $userInfo ['comment'] );
 	if (! $userInfo ['inviterID'])
-		$userInfo ['inviterID'] = - 1;
+		$userInfo ['inviterID'] = -1;
 	$inviter = $db->getAllByID ( "tuser", $userInfo ['inviterID'] );
 	if ($inviter) {
 		$smarty->assign ( 'inviterName', $inviter ['name'] );
@@ -66,10 +67,15 @@ function showRegister($smarty, $userInfo, $db) {
 	die ();
 }
 function showIndex($smarty, $userInfo, $db) {
+	if (!$userInfo ['timeAmount']) $userInfo ['timeAmount'] = 0;
 	$userInfo ['timeAmount'] = new DateInterval ( "PT" . $userInfo ['timeAmount'] . "M" );
 	$userInfo ['timeAmount'] = $userInfo ['timeAmount']->format ( '%d天 %h时 %i分' );
 	$smarty->assign ( 'userInfo', $userInfo );
 	$rank = $db->getRank ( $userInfo ['score'] );
+	$ret = $db->getCache("LongTimeEnabled");
+	if ($ret['value']){
+		$rank['maxTime'] = $rank['maxTime2'];
+	}
 	$smarty->assign ( 'rank', $rank );
 	switch ($userInfo ['state']) {
 		case 0 :
@@ -92,6 +98,7 @@ function showIndex($smarty, $userInfo, $db) {
 			$smarty->assign ( "rentInfo", $rent );
 			$time = date_create ( $rent ['rentTime'] );
 			$now = new DateTime ( "NOW" );
+			$rentTime= new DateTime ( $rent ['rentTime'] );
 			$returnTime = new DateTime ( $rent ['rentTime'] );
 			$returnTime->add ( new DateInterval ( 'PT' . $rank ['maxTime'] . 'H' ) );
 			$smarty->assign ( "returnTime", $returnTime );
@@ -99,6 +106,12 @@ function showIndex($smarty, $userInfo, $db) {
 				$smarty->assign ( "over", true );
 			else
 				$smarty->assign ( "over", false );
+			$past = date_diff($now, $rentTime);
+			if ($past->i < 4) {
+				$smarty->assign("report", true);
+			} else {
+				$smarty->assign("report", false);
+			}
 			$smarty->assign ( "now", $now );
 			$smarty->assign ( "restTime", date_diff ( $now, $returnTime )->format ( '%d天 %h时 %i分' ) );
 			$smarty->assign ( "state", "已借车" );
@@ -134,6 +147,8 @@ function showRented($smarty, $userInfo, $db) {
 	$pwd = $db->rentIt ( $userInfo ['ID'], $_GET ['s'] );
 	if ($pwd == "no") {
 		showError ( $smarty, "真不巧，该车刚被借走或在修~", $db );
+	} else if ($pwd == "quick") {
+		showError ( $smarty, "你借车太频繁了~歇一会再借", $db );
 	}
 	$smarty->assign ( "pwd", $pwd );
 	$smarty->assign ( "s", $_GET ['s'] );

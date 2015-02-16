@@ -14,11 +14,11 @@
 		<div role="main" class="ui-content">
 			<!-- {if $name} -->
 			<h3>欢迎新用户，请耐心等待认证，或修改内容。</h3>
+			<!-- {if $comment} -->
+			<p style="color:red;">留言：{$comment}</p>
+			<!-- {/if} -->
 			<!-- {else} -->
 			<h3>欢迎新用户，使用前请先认证！</h3>
-			<!-- {if $comment} -->
-			<p style="color:red;">留言：{$userInfo['comment']}</p>
-			<!-- {/if} -->
 			<h4>用户协议</h4>
 			<ol>
 				<li>您……</li>

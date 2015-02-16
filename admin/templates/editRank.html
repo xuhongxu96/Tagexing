@@ -1,0 +1,39 @@
+{include 'adminHeader.html'}
+
+	<h1>编辑等级信息</h1>
+	<form action="index.php?a=submitEditRank" method="post">
+		<input type="hidden" name="id" value="{$rankInfo['ID']}" />
+		<div class="form-group">
+			<label for="name">等级名称</label> <input type="text"
+				class="form-control" name="name" id="name"
+				value="{$rankInfo['name']}" />
+		</div>
+		<div class="form-group">
+			<label for="minScore">需要达到分数</label> <input type="text"
+				class="form-control" name="minScore" id="minScore"
+				value="{$rankInfo['minScore']}" />
+		</div>
+		<div class="form-group">
+			<label for="maxTime">最大借车时长</label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="maxTime" id="maxTime"
+					value="{$rankInfo['maxTime']}" />
+				<div class="input-group-addon">小时</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="maxTime2">活动时期 - 最大借车时长</label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="maxTime2"
+					id="maxTime2" value="{$rankInfo['maxTime2']}" />
+				<div class="input-group-addon">小时</div>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-primary">提交</button>
+		<a href="javascript:history.go(-1);" class="btn btn-default">返回</a>
+	</form>
+</div>
+<!-- /container -->
+
+</body>
+</html>
