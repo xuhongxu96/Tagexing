@@ -24,7 +24,7 @@ function showTip($smarty, $tip, $db) {
 	$db->disconnect ();
 	die ();
 }
-if (WX_DEBUG == '1') {
+if (WX_DEBUG == '2') {
 	//$openid = "xuhongxu96justforfun";
 	$openid = "new";
 	 $openid = "hahahahahaha";
@@ -210,13 +210,13 @@ function test_auth($authkey, $db, $code)
 				$drift, $authwnd, $lastsucc,
 				$otp, $otplen,
 				$currsucc, $currdft);
-		return $currdft;
+				
+		if (WX_DEBUG) return true;
 		if ($ret == OTP_SUCCESS) {
 			$db->setCache($authkey, $currdft, -1);
 			return true;
 		}
 	}
-	if (WX_DEBUG) return true;
 	return false;
 }
 

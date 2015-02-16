@@ -1458,12 +1458,12 @@ class Wechat
 			if (!$json || !empty($json['errcode'])) {
 				$this->errCode = $json['errcode'];
 				$this->errMsg = $json['errmsg'];
-				if ($this->errCode == 0) return true;
-				return false;
+				if ($this->errCode == 0) return 1;
+				return $this->errMsg;
 			}
-			return true;
+			return 1;
 		}
-		return false;
+		return 0;
 	}
 
 	/**

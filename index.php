@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once 'config.php';
 require_once 'db.php';
 require_once 'wechat.class.php';
@@ -58,7 +58,7 @@ switch ($type) {
 							$weObj->text ( "您目前处于未认证状态，请先认证！\n\n<a href='" . $authURI . "'>点此开始你的" . WX_TITLE . "！</a>" )->reply ();
 							break;
 						case 1 :
-							$weObj->text ( "<a href='$authURI'>　　　　　　</a>\n<a href='$authURI'>点此确认借车</a>\n<a href='$authURI'>　　　　　　</a>" )->reply ();
+							$weObj->text ( "<a href='$authURI'>确认借车 　 　 　 　 　 　 　 　 　 　 　 　 　 　 　 　 　 　 　 　 　 </a>" )->reply ();
 							break;
 						case 2 :
 							$weObj->text ( "您目前处于已借车状态，不能再次借车！\n\n<a href='" . $authURI . "'>点此开始你的" . WX_TITLE . "！</a>" )->reply ();

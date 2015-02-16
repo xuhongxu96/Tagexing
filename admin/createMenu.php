@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once '../config.php';
 require_once '../db.php';
 require_once '../wechat.class.php';
@@ -13,8 +13,11 @@ $options = array (
 
 $weObj = new Wechat ( $options );
 
+$redirectURI = urlencode ( "http://" . WX_URL . "/main.php" );
+$authURI = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . WX_APPID . "&redirect_uri=" . $redirectURI . "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+
 $weObj->checkAuth ();
-$weObj->createMenu ( array (
+echo ($weObj->createMenu ( array (
 		'button' => array (
 				0 => array (
 						'name' => WX_TITLE,
@@ -22,4 +25,4 @@ $weObj->createMenu ( array (
 						'url' => $authURI
 				)
 		)
-) );
+) ));

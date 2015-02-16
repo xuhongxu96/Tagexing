@@ -1,5 +1,4 @@
-<?php
-
+﻿<?php
 class DB {
 	private $mysqli;
 	public function connect() {
@@ -135,7 +134,7 @@ class DB {
 			$rentTime = new DateTime ( $rent ['rentTime'] );
 			$now = new DateTime ( "NOW" );
 			$past = date_diff($now, $rentTime);
-			if (interval_to_seconds($past) / 60 < 20) { // 两次借车间隔时间
+			if (interval_to_seconds($past) / 60 < 5) { // 两次借车间隔时间
 				return "quick";
 			}
 		}

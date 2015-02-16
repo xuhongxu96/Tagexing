@@ -3,7 +3,6 @@ require_once '../config.php';
 require_once '../function.php';
 require_once '../db.php';
 require_once '../smarty/Smarty.class.php';
-
 session_start ();
 $smarty = new Smarty ();
 $db = new DB ();

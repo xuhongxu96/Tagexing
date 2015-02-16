@@ -59,5 +59,4 @@ function http_post($url,$param,$post_file=false){
 		return false;
 	}
 }
-?>
 
