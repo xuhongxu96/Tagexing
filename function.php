@@ -2,7 +2,15 @@
 function logdebug($text){
 	file_put_contents('../data/log.txt',$text."\n",FILE_APPEND);		
 }
-
+function interval_to_seconds($ti)
+{
+	return ($ti->y * 365 * 24 * 60 * 60) +
+	($ti->m * 30 * 24 * 60 * 60) +
+	($ti->d * 24 * 60 * 60) +
+	($ti->h * 60 * 60) +
+	($ti->i * 60) +
+	$ti->s; 
+}
 function http_get($url){
 	$oCurl = curl_init();
 	if(stripos($url,"https://")!==FALSE){

@@ -1,10 +1,11 @@
 <?php
 session_start ();
 require_once './config.php';
+require_once './function.php';
 require_once './db.php';
 require_once './wechat.class.php';
 require_once './smarty/Smarty.class.php';
-require_once './function.php';
+
 
 $openid = '';
 $smarty = new Smarty ();
@@ -87,7 +88,7 @@ function showIndex($smarty, $userInfo, $db) {
 			if ($rent) {
 				$now = new DateTime ( "NOW" );
 				$returnTime = new DateTime ( $rent ['returnTime'] );
-				if (date_diff ( $now, $returnTime )->i <= CONFIG_PWD_EXPIRED) {
+				if (interval_to_seconds(date_diff ( $now, $returnTime )) / 60 <= CONFIG_PWD_EXPIRED) {
 					$smarty->assign ( "pwd", $rent ['lockPWD'] );
 				}
 			}
@@ -96,6 +97,7 @@ function showIndex($smarty, $userInfo, $db) {
 		case 2 :
 			$rent = $db->getAllByID ( "trent", $userInfo ['rentID'] );
 			$smarty->assign ( "rentInfo", $rent );
+			$smarty->assign("bikeInfo", $db->getAllByID("tbike", $rent['bikeID']));
 			$time = date_create ( $rent ['rentTime'] );
 			$now = new DateTime ( "NOW" );
 			$rentTime= new DateTime ( $rent ['rentTime'] );
@@ -107,7 +109,7 @@ function showIndex($smarty, $userInfo, $db) {
 			else
 				$smarty->assign ( "over", false );
 			$past = date_diff($now, $rentTime);
-			if ($past->i < 4) {
+			if (interval_to_seconds($past) / 60 < 4) {
 				$smarty->assign("report", true);
 			} else {
 				$smarty->assign("report", false);
@@ -183,6 +185,43 @@ function showReturned($smarty, $userInfo, $db) {
 	$db->disconnect ();
 	die ();
 }
+define("OTP_SUCCESS",0x00000000); //操作成功
+define("OTP_ERR_INVALID_PARAMETER",0x00000001);//参数无效
+define("OTP_ERR_CHECK_PWD",0x00000002);//认证失败
+define("OTP_ERR_SYN_PWD",0x00000003);//同步失败
+define("OTP_ERR_REPLAY",0x00000004);//动态口令被重放
+
+function test_auth($authkey, $db, $code)
+{
+	if (function_exists('et_checkpwdz201'))
+	{
+		$t = time();
+		$t0 = 0;
+		$x = 60;
+		$drift = intval($db->getCache($authkey));
+		$authwnd = 10;  //认证窗口
+		$lastsucc = 0;
+		$otp = $code;
+		$otplen = 6;    //otp长度，6位或8位
+		$currsucc = 0;
+		$currdft = 0;
+		$ret = OTP_ERR_CHECK_PWD;
+		$ret = et_checkpwdz201($authkey, $t, $t0, $x,
+				$drift, $authwnd, $lastsucc,
+				$otp, $otplen,
+				$currsucc, $currdft);
+		return $currdft;
+		if ($ret == OTP_SUCCESS) {
+			$db->setCache($authkey, $currdft, -1);
+			return true;
+		}
+	}
+	if (WX_DEBUG) return true;
+	return false;
+}
+
+
+
 $userInfo = $db->getInfo ( $openid );
 
 if (! isset ( $_GET ["a"] )) {
@@ -231,10 +270,10 @@ switch ($userInfo ["state"]) {
 				if (isset ( $_GET ['s'] ) && isset ( $_POST ['code'] )) {
 					$bike = $db->getAllByID ( "tbike", $_GET ['s'] );
 					$stop = $db->getAllByID ( "tstop", $bike ['stopID'] );
-					if ($_POST ['code'] == $stop ['code']) {
+					if (test_auth( $stop ['code'], $db, $_POST['code'])) {
 						showRented ( $smarty, $userInfo, $db );
 					} else {
-						showError ( $smarty, '车站码错误！', $db );
+						showError ( $smarty, '车站口令错误，请重试！', $db );
 					}
 				} else {
 					showError ( $smarty, '请正确借用车辆！', $db );
@@ -275,10 +314,10 @@ switch ($userInfo ["state"]) {
 			case 'returnIt' :
 				if (isset ( $_GET ['s'] ) && isset ( $_POST ['code'] )) {
 					$stop = $db->getAllByID ( "tstop", $_GET ['s'] );
-					if ($_POST ['code'] == $stop ['code']) {
+					if (test_auth( $stop ['code'], $db, $_POST['code'])) {
 						showReturned ( $smarty, $userInfo, $db );
 					} else {
-						showError ( $smarty, '车站码错误！', $db );
+						showError ( $smarty, '车站口令错误，请重试！', $db );
 					}
 				} else {
 					showError ( $smarty, '请正确归还车辆！', $db );

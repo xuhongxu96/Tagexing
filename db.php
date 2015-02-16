@@ -1,4 +1,5 @@
 <?php
+
 class DB {
 	private $mysqli;
 	public function connect() {
@@ -134,7 +135,7 @@ class DB {
 			$rentTime = new DateTime ( $rent ['rentTime'] );
 			$now = new DateTime ( "NOW" );
 			$past = date_diff($now, $rentTime);
-			if ($past->i < 20) { // 两次借车间隔时间
+			if (interval_to_seconds($past) / 60 < 20) { // 两次借车间隔时间
 				return "quick";
 			}
 		}
@@ -193,13 +194,13 @@ class DB {
 			$rank ['maxTime'] = $rank ['maxTime2'];
 		}
 		$returnTime->add ( new DateInterval ( 'PT' . $rank ['maxTime'] . 'H' ) );
-		$overH = date_diff ( $now, $returnTime )->h;
+		$overH = interval_to_seconds(date_diff ( $now, $returnTime )) / 3600;
 		if ($overH.invert)
-			$this->update ( "UPDATE tuser SET state = 1, score = score + 3, timeAmount = timeAmount + " . date_diff ( $now, $rentTime )->i . " WHERE ID = $userID" );
+			$this->update ( "UPDATE tuser SET state = 1, score = score + 3, timeAmount = timeAmount + " . intval(interval_to_seconds(date_diff ( $now, $rentTime )) / 60) . " WHERE ID = $userID" );
 		else if ($overH <= 24)
-			$this->update ( "UPDATE tuser SET state = 1, score = score - 5, timeAmount = timeAmount + " . date_diff ( $now, $rentTime )->i . " WHERE ID = $userID" );
+			$this->update ( "UPDATE tuser SET state = 1, score = score - 5, timeAmount = timeAmount + " . intval(interval_to_seconds(date_diff ( $now, $rentTime )) / 60) . " WHERE ID = $userID" );
 		else
-			$this->update ( "UPDATE tuser SET state = 1, score = score - 10, timeAmount = timeAmount + " . date_diff ( $now, $rentTime )->i . " WHERE ID = $userID" );
+			$this->update ( "UPDATE tuser SET state = 1, score = score - 10, timeAmount = timeAmount + " . intval(interval_to_seconds(date_diff ( $now, $rentTime )) / 60) . " WHERE ID = $userID" );
 		return $pwd;
 	}
 	public function setAccident($userID) {

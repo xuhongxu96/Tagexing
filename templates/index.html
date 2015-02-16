@@ -25,9 +25,9 @@
 				<li style="color:red;">已超时，请尽快还车！</li>
 				<li style="color:red;">超出时长：{$restTime}</li>
 				<!-- {else} -->
+				<li>您借的是：{$bikeInfo['name']}</li>
 				<li>剩余时长：{$restTime}</li>
 				<!-- {/if} -->
-				<li>当前时间：{$now|date_format:"%m-%d %H:%M"}</li>
 				<li>借车时间：{$rentInfo['rentTime']|date_format:"%m-%d %H:%M"}</li>
 				<li>还车期限：{$returnTime|date_format:"%m-%d %H:%M"}</li>
 				<!-- {/if} -->
