@@ -131,7 +131,7 @@ class DB {
 		}
 		$user = $this->getAllByID ( "tuser", $userID );
 		$rent = $this->getAllByID ( "trent", $user ['rentID'] );
-		if ($rent) {
+		if ($rent && $rent['brokenType'] == 0) {
 			$rentTime = new DateTime ( $rent ['rentTime'] );
 			$now = new DateTime ( "NOW" );
 			$past = date_diff ( $now, $rentTime );

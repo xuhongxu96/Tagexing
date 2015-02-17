@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start ();
 require_once './config.php';
 require_once './function.php';
@@ -85,7 +85,7 @@ function showIndex($smarty, $userInfo, $db) {
 		case 1 :
 			$rent = $db->getAllByID ( "trent", $userInfo ['rentID'] );
 			$smarty->assign ( "pwd", "" );
-			if ($rent) {
+			if ($rent && $rent['brokenType'] == 0) {
 				$now = new DateTime ( "NOW" );
 				$returnTime = new DateTime ( $rent ['returnTime'] );
 				if (interval_to_seconds(date_diff ( $now, $returnTime )) / 60 <= CONFIG_PWD_EXPIRED) {
