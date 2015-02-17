@@ -46,7 +46,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			$all = $db->query ( "SELECT COUNT(*) FROM tadmin" );
 			$smarty->assign ( "index", $_GET ['i'] );
 			$smarty->assign ( "page", ceil ( $all ['COUNT(*)'] / 20 ) );
-			$smarty->assign ( "admins", $db->queryAll ( "SELECT * FROM tadmin LIMIT " . $_GET ['i'] . ", 20" ) );
+			$smarty->assign ( "admins", $db->queryAll ( "SELECT * FROM tadmin LIMIT " . $_GET ['i'] * 20 . ", 20" ) );
 			$smarty->display ( "adminMgr.html" );
 			break;
 		case 'editAdmin' :
@@ -121,7 +121,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			$all = $db->query ( "SELECT COUNT(*) FROM tbike" );
 			$smarty->assign ( "index", $_GET ['i'] );
 			$smarty->assign ( "page", ceil ( $all ['COUNT(*)'] / 20 ) );
-			$smarty->assign ( "bikes", $db->queryAll ( "SELECT *,(SELECT tstop.name FROM tstop WHERE ID = tbike.stopID) AS stopName FROM tbike LIMIT " . $_GET ['i'] . ", 20" ) );
+			$smarty->assign ( "bikes", $db->queryAll ( "SELECT *,(SELECT tstop.name FROM tstop WHERE ID = tbike.stopID) AS stopName FROM tbike LIMIT " . $_GET ['i'] * 20 . ", 20" ) );
 			$smarty->display ( "bikeMgr.html" );
 			break;
 		case 'editBike' :
@@ -198,7 +198,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			$all = $db->query ( "SELECT COUNT(*) FROM trank" );
 			$smarty->assign ( "index", $_GET ['i'] );
 			$smarty->assign ( "page", ceil ( $all ['COUNT(*)'] / 20 ) );
-			$smarty->assign ( "ranks", $db->queryAll ( "SELECT * FROM trank LIMIT " . $_GET ['i'] . ", 20" ) );
+			$smarty->assign ( "ranks", $db->queryAll ( "SELECT * FROM trank LIMIT " . $_GET ['i'] * 20 . ", 20" ) );
 			$smarty->display ( "rankMgr.html" );
 			break;
 		case 'editRank' :
@@ -271,7 +271,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 				$all = $db->query ( "SELECT COUNT(*) FROM trent" );
 				$smarty->assign ( "index", $_GET ['i'] );
 				$smarty->assign ( "page", ceil ( $all ['COUNT(*)'] / 20 ) );
-				$rent = $db->queryAll ( "SELECT *,TIMEDIFF(returnTime, rentTime) AS timeDiff,(SELECT tbike.name FROM tbike WHERE ID = trent.bikeID) AS bikeName" . ", (SELECT CONCAT(tuser.name, tuser.mobile) FROM tuser WHERE ID = trent.userID) AS userName " . ", (SELECT tstop.name FROM tstop WHERE ID = trent.stop1) AS stopName1,(SELECT tstop.name FROM tstop WHERE ID = trent.stop2) AS stopName2 FROM trent ORDER BY ID DESC, returnTime, rentTime LIMIT " . $_GET ['i'] . ", 20" );
+				$rent = $db->queryAll ( "SELECT *,TIMEDIFF(returnTime, rentTime) AS timeDiff,(SELECT tbike.name FROM tbike WHERE ID = trent.bikeID) AS bikeName" . ", (SELECT CONCAT(tuser.name, tuser.mobile) FROM tuser WHERE ID = trent.userID) AS userName " . ", (SELECT tstop.name FROM tstop WHERE ID = trent.stop1) AS stopName1,(SELECT tstop.name FROM tstop WHERE ID = trent.stop2) AS stopName2 FROM trent ORDER BY ID DESC, returnTime, rentTime LIMIT " . $_GET ['i'] * 20 . ", 20" );
 				$smarty->assign ( "rent", $rent );
 			}
 			$smarty->display ( "rentMgr.html" );
@@ -297,7 +297,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			$all = $db->query ( "SELECT COUNT(*) FROM tstop" );
 			$smarty->assign ( "index", $_GET ['i'] );
 			$smarty->assign ( "page", ceil ( $all ['COUNT(*)'] / 20 ) );
-			$smarty->assign ( "stops", $db->queryAll ( "SELECT * FROM tstop LIMIT " . $_GET ['i'] . ", 20" ) );
+			$smarty->assign ( "stops", $db->queryAll ( "SELECT * FROM tstop LIMIT " . $_GET ['i'] * 20 . ", 20" ) );
 			$smarty->display ( "stopMgr.html" );
 			break;
 		case 'editStop' :
@@ -374,7 +374,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 				$all = $db->query ( "SELECT COUNT(*) FROM tuser" );
 				$smarty->assign ( "index", $_GET ['i'] );
 				$smarty->assign ( "page", ceil ( $all ['COUNT(*)'] / 20 ) );
-				$user = $db->queryAll ( "SELECT *, (SELECT CONCAT(t.name,t.mobile) FROM tuser AS t WHERE t.ID = t1.inviterID) AS inviter FROM tuser AS t1 LIMIT " . $_GET ['i'] . ", 20" );
+				$user = $db->queryAll ( "SELECT *, (SELECT CONCAT(t.name,t.mobile) FROM tuser AS t WHERE t.ID = t1.inviterID) AS inviter FROM tuser AS t1 LIMIT " . $_GET ['i'] * 20 . ", 20" );
 				$smarty->assign ( "users", $user );
 			}
 			
