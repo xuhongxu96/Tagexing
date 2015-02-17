@@ -93,7 +93,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			} else {
 				$ret = $db->editAdmin ( $_POST ['id'], $_POST ['name'], $_POST ['pwd'], $limit );
 			}
-			if ($ret == 0) {
+			if ($ret == -1) {
 				echo "Name has been used!";
 			} else {
 				header ( "location: index.php?a=adminMgr" );
@@ -169,7 +169,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 				$ret = $db->editBike ( $_POST ['id'], $_POST ['name'], $_POST ['state'], $_POST ['stop'], $_POST ['pwd'] );
 			}
 			$db->refreshStopInfo ();
-			if ($ret == 0) {
+			if ($ret == -1) {
 				echo "Name has been used!";
 			} else {
 				header ( "location: index.php?a=bikeMgr" );
@@ -340,7 +340,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			} else {
 				$ret = $db->editStop ( $_POST ['id'], $_POST ['name'], $_POST ['stopCount'], $_POST ['code'] );
 			}
-			if ($ret == 0) {
+			if ($ret == -1) {
 				echo "Name has been used!";
 			} else {
 				header ( "location: index.php?a=stopMgr" );

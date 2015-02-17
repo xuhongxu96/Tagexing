@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class DB {
 	private $mysqli;
 	public function connect() {
@@ -39,15 +39,16 @@ class DB {
 	}
 	public function update($sql) {
 		$this->mysqli->query ( $sql );
-		if ($this->mysqli->affected_rows != -1)
+		if ($this->mysqli->affected_rows != - 1)
 			return $this->mysqli->affected_rows;
-		else{
+		else {
 			echo $sql;
 			return $sql;
 		}
 	}
 	public function getAllByID($table, $ID) {
-		if (!$ID) $ID = -1;
+		if (! $ID)
+			$ID = - 1;
 		return $this->query ( "SELECT * FROM $table WHERE ID = $ID" );
 	}
 	public function getInfo($openid) {
@@ -129,12 +130,12 @@ class DB {
 			return "no";
 		}
 		$user = $this->getAllByID ( "tuser", $userID );
-		$rent = $this->getAllByID("trent", $user['rentID']);
+		$rent = $this->getAllByID ( "trent", $user ['rentID'] );
 		if ($rent) {
 			$rentTime = new DateTime ( $rent ['rentTime'] );
 			$now = new DateTime ( "NOW" );
-			$past = date_diff($now, $rentTime);
-			if (interval_to_seconds($past) / 60 < 5) { // 两次借车间隔时间
+			$past = date_diff ( $now, $rentTime );
+			if (interval_to_seconds ( $past ) / 60 < 5) { // 两次借车间隔时间
 				return "quick";
 			}
 		}
@@ -188,18 +189,18 @@ class DB {
 		$now = new DateTime ( "NOW" );
 		$returnTime = new DateTime ( $rent ['rentTime'] );
 		$ret = $this->getCache ( "LongTimeEnabled" );
-		$rank = $this->getRank($user['score']);
+		$rank = $this->getRank ( $user ['score'] );
 		if ($ret ['value']) {
 			$rank ['maxTime'] = $rank ['maxTime2'];
 		}
 		$returnTime->add ( new DateInterval ( 'PT' . $rank ['maxTime'] . 'H' ) );
-		$overH = interval_to_seconds(date_diff ( $now, $returnTime )) / 3600;
-		if ($overH.invert)
-			$this->update ( "UPDATE tuser SET state = 1, score = score + 3, timeAmount = timeAmount + " . intval(interval_to_seconds(date_diff ( $now, $rentTime )) / 60) . " WHERE ID = $userID" );
+		$overH = interval_to_seconds ( date_diff ( $now, $returnTime ) ) / 3600;
+		if ($overH . invert)
+			$this->update ( "UPDATE tuser SET state = 1, score = score + 3, timeAmount = timeAmount + " . intval ( interval_to_seconds ( date_diff ( $now, $rentTime ) ) / 60 ) . " WHERE ID = $userID" );
 		else if ($overH <= 24)
-			$this->update ( "UPDATE tuser SET state = 1, score = score - 5, timeAmount = timeAmount + " . intval(interval_to_seconds(date_diff ( $now, $rentTime )) / 60) . " WHERE ID = $userID" );
+			$this->update ( "UPDATE tuser SET state = 1, score = score - 5, timeAmount = timeAmount + " . intval ( interval_to_seconds ( date_diff ( $now, $rentTime ) ) / 60 ) . " WHERE ID = $userID" );
 		else
-			$this->update ( "UPDATE tuser SET state = 1, score = score - 10, timeAmount = timeAmount + " . intval(interval_to_seconds(date_diff ( $now, $rentTime )) / 60) . " WHERE ID = $userID" );
+			$this->update ( "UPDATE tuser SET state = 1, score = score - 10, timeAmount = timeAmount + " . intval ( interval_to_seconds ( date_diff ( $now, $rentTime ) ) / 60 ) . " WHERE ID = $userID" );
 		return $pwd;
 	}
 	public function setAccident($userID) {
@@ -221,7 +222,7 @@ class DB {
 		$pwd = $this->mysqli->real_escape_string ( $pwd );
 		$ret = $this->query ( "SELECT * FROM tadmin WHERE name = '$name'" );
 		if ($ret)
-			return 0;
+			return -1;
 		return $this->update ( "INSERT INTO tadmin (name, pwd, `limit`) VALUES ('$name', '$pwd', $lmt)" );
 	}
 	public function editAdmin($id, $name, $pwd, $lmt) {
@@ -229,7 +230,7 @@ class DB {
 		$pwd = $this->mysqli->real_escape_string ( $pwd );
 		$ret = $this->query ( "SELECT * FROM tadmin WHERE name = '$name' AND ID != $id" );
 		if ($ret)
-			return 0;
+			return -1;
 		return $this->update ( "UPDATE tadmin SET name = '$name', pwd = '$pwd', `limit` = $lmt WHERE ID = $id" );
 	}
 	public function addBike($name, $state, $stopID, $pwd) {
@@ -239,7 +240,7 @@ class DB {
 		$state = $this->mysqli->real_escape_string ( $state );
 		$ret = $this->query ( "SELECT * FROM tbike WHERE name = '$name'" );
 		if ($ret)
-			return 0;
+			return -1;
 		return $this->update ( "INSERT INTO tbike (name, state, stopID, pwd) VALUES ('$name', $state, $stopID, '$pwd')" );
 	}
 	public function editBike($id, $name, $state, $stopID, $pwd) {
@@ -249,7 +250,7 @@ class DB {
 		$state = $this->mysqli->real_escape_string ( $state );
 		$ret = $this->query ( "SELECT * FROM tbike WHERE name = '$name' AND ID != $id" );
 		if ($ret)
-			return 0;
+			return -1;
 		return $this->update ( "UPDATE tbike SET name = '$name', pwd = '$pwd', state = $state, stopID = $stopID WHERE ID = $id" );
 	}
 	public function refreshStopInfo() {
@@ -276,20 +277,20 @@ class DB {
 	}
 	public function addStop($name, $stopCount, $code) {
 		$name = $this->mysqli->real_escape_string ( $name );
-		$stopCount = $this->mysqli->real_escape_string ( $stopCount);
-		$code= $this->mysqli->real_escape_string ( $code );
+		$stopCount = $this->mysqli->real_escape_string ( $stopCount );
+		$code = $this->mysqli->real_escape_string ( $code );
 		$ret = $this->query ( "SELECT * FROM tstop WHERE name = '$name'" );
 		if ($ret)
-			return 0;
+			return -1;
 		return $this->update ( "INSERT INTO tstop (name, stopCount, code, bikeCount) VALUES ('$name', $stopCount, '$code', 0)" );
 	}
 	public function editStop($id, $name, $stopCount, $code) {
 		$name = $this->mysqli->real_escape_string ( $name );
-		$stopCount = $this->mysqli->real_escape_string ( $stopCount);
-		$code= $this->mysqli->real_escape_string ( $code );
+		$stopCount = $this->mysqli->real_escape_string ( $stopCount );
+		$code = $this->mysqli->real_escape_string ( $code );
 		$ret = $this->query ( "SELECT * FROM tstop WHERE name = '$name' AND ID != $id" );
 		if ($ret)
-			return 0;
+			return -1;
 		return $this->update ( "UPDATE tstop SET name = '$name', stopCount = $stopCount, code = '$code' WHERE ID = $id" );
 	}
 	public function editUser($id, $score, $state, $freeTime, $mobile, $cmt) {
@@ -297,12 +298,14 @@ class DB {
 		$score = $this->mysqli->real_escape_string ( $score );
 		$state = $this->mysqli->real_escape_string ( $state );
 		$freeTime = $this->mysqli->real_escape_string ( $freeTime );
-		$mobile= $this->mysqli->real_escape_string ( $mobile );
+		$mobile = $this->mysqli->real_escape_string ( $mobile );
 		$cmt = $this->mysqli->real_escape_string ( $cmt );
-		if ($this->query("SELECT * FROM tuser WHERE mobile = '$mobile' AND id != $id")) {
+		if ($this->query ( "SELECT * FROM tuser WHERE mobile = '$mobile' AND id != $id" )) {
 			return "no";
 		}
-		return $this->update ( "UPDATE tuser SET score= $score, state=$state, freeTime = '$freeTime', mobile = '$mobile', comment = '$cmt' WHERE ID = $id" );
+		if ($freeTime)
+			return $this->update ( "UPDATE tuser SET score= $score, state=$state, freeTime = '$freeTime', mobile = '$mobile', comment = '$cmt' WHERE ID = $id" );
+		else
+			return $this->update ( "UPDATE tuser SET score= $score, state=$state, freeTime = null, mobile = '$mobile', comment = '$cmt' WHERE ID = $id" );
 	}
 }
-
