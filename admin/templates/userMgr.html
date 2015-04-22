@@ -46,7 +46,11 @@
 				<td>{$item['name']}</td>
 				<td>{if $item['pic']}<a href="{$item['pic']}" target="_blank"/>查看{else}暂无{/if}</td>
 				<td>{$item['confirmInfo']}</td>
-				<td><input class="form-control" type="number" value="{$item['score']}" id="score{$item['ID']}" /></td>
+				<!-- {if $scoreMgr } -->
+				<td><input class="form-control" type="number" value="{$item['score']}" id="score{$item['ID']}" /><a href="index.php?a=scoreRec&id={$item['ID']}" target="_blank">明细</a></td>
+				<!--{else}-->
+				<td>{$item['score']}</td>
+				<!--{/if}-->
 				<td>
 				<select class="form-control" id="state{$item['ID']}">
 				<option value="0" {if $item['state'] eq 0} selected="selected"{/if}>未认证</option>

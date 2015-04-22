@@ -24,11 +24,13 @@
 			</label><label class="checkbox-inline"> <input type="checkbox" name="limit[]"
 				id="inlineCheckbox4" value="8" {if $adminInfo['limit'] & 8} checked="checked"{/if}> 车站管理
 			</label><label class="checkbox-inline"> <input type="checkbox" name="limit[]"
-				id="inlineCheckbox5" value="16" {if $adminInfo['limit'] & 16} checked="checked"{/if}> 用户管理
+				id="inlineCheckbox5" value="16" {if $adminInfo['limit'] & 16} checked="checked"{/if}> 用户（不含积分）管理
 			</label><label class="checkbox-inline"> <input type="checkbox" name="limit[]"
 				id="inlineCheckbox6" value="32" {if $adminInfo['limit'] & 32} checked="checked"{/if}> 志愿者管理
 			</label><label class="checkbox-inline"> <input type="checkbox" name="limit[]"
 				id="inlineCheckbox7" value="64" {if $adminInfo['limit'] & 64} checked="checked"{/if}> 系统管理
+			</label><label class="checkbox-inline"> <input type="checkbox" name="limit[]"
+				id="inlineCheckbox8" value="128" {if $adminInfo['limit'] & 128} checked="checked"{/if}> 积分（含积分）管理
 			</label>
 		</div>
 		<button type="submit" class="btn btn-primary">提交</button>

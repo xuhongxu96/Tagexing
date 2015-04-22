@@ -1,1 +1,50 @@
 @CHARSET "UTF-8";
+.marquee {
+    white-space: nowrap;
+    width: 100%;
+    overflow-x: -webkit-marquee;
+    -webkit-marquee-direction: backwards;
+    -webkit-marquee-style: scroll;
+    -webkit-marquee-speed: fast;
+    -webkit-marquee-increment: small;
+    overflow-x: marquee-line;
+    marquee-direction: backwards;
+    marquee-style: scroll;
+    marquee-speed: fast;
+}
+
+
+#helpPage .ui-content {
+    text-align: center;
+}
+
+#help5 h2 {
+	font-size: 2em;
+	margin: 1em 8px;
+}
+#help5 table {
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+}
+
+#help5 th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #dedede;
+}
+
+#help5 td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
+}
+
+.help img {
+	max-width: 300px;
+	width: 80%;
+}

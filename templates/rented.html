@@ -1,33 +1,31 @@
 <!DOCTYPE html>
 <html>
+
 <head>{include 'library/header.html' title='借车成功'}
 </head>
+
 <body>
-	<div data-role="page" id="rentPage">
-		<div data-role="header">
-			<h1>借车成功</h1>
-		</div>
-		<div role="main" class="ui-content">
-			<div class="ui-body" style="text-align: center;">
-				<img src="images/tick.png" alt="success!" />
-				<p style="margin-top: 60px; margin-bottom: 0;">开锁密码</p>
-				<p
-					style="font-weight: 800; font-size: 5em; color: green; margin: 0;">{$pwd}</p>
-					<p style="margin-top: 30px; margin-bottom: 0;">如果打不开锁，请点击报告问题！</p>
-			</div>
-		</div>
-		<div data-role="footer" style="overflow: hidden;"
-			data-position="fixed" data-tap-toggle="false">
-			<div data-role="navbar">
-				<ul>
-					<li><a href="main.php?q={$random}"
-						class="ui-btn ui-shadow ui-btn-icon-top ui-icon-back"
-						data-role="button" role="button">回到主页</a></li>
-					<li><a href="main.php?a=report"
-						class="ui-btn ui-shadow ui-icon-phone ui-btn-icon-top">报告问题</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
+    <div data-role="page" id="rentPage" data-theme="b">
+        <div data-role="header">
+            <h1>借车成功</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <div class="ui-body" style="text-align: center;">
+                <img src="images/tick.png" alt="success!" />
+                <p style="margin-top: 60px; margin-bottom: 0;">开锁密码</p>
+                <p style="font-weight: 800; font-size: 5em; color: green; margin: 0;">{$pwd}</p>
+                <p style="margin-top: 30px; margin-bottom: 0;">如果打不开锁，请点击<a href="main.php?a=report">报告问题！</a></p>
+            </div>
+        </div>
+        <div data-role="footer" style="overflow: hidden;" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="main.php?q={$random}" class="ui-btn ui-shadow ui-btn-icon-top ui-icon-back" data-role="button" role="button">回到主页</a></li>
+                    <li><a href="main.php?a=report" class="ui-btn ui-shadow ui-icon-phone ui-btn-icon-top">报告问题</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

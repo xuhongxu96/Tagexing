@@ -3,19 +3,19 @@
 <head>{include 'library/header.html' title='我要借车'}
 </head>
 <body>
-	<div data-dom-cache="false" data-role="page" id="rentPage">
+	<div data-dom-cache="false" data-role="page" id="rentPage" data-theme="b">
 		<div data-role="header">
 			<h1>我要借车</h1>
 		</div>
 		<div role="main" class="ui-content">
 			<h3>请选择车站</h3>
-			<ul data-role="listview" data-inset="true" data-filter="true">
+			<ul data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="搜索">
 				<!-- {foreach $stop as $item} -->
 				<!-- {if $item['bikeCount']} -->
-				<li><a href="main.php?a=rentBike&s={$item['ID']}">{$item['name']}<span class="ui-li-count">{$item['bikeCount']}</span></a></li>
+				<li><a href="main.php?a=rentBike&s={$item['ID']}">{$item['name']}<span class="ui-li-count">车辆剩余{$item['bikeCount']}</span></a></li>
 				<!-- {else} -->
 				<li><a href="#" class="ui-disabled">{$item['name']}<span
-						class="ui-li-count">{$item['bikeCount']}</span></a></li>
+						class="ui-li-count">车辆剩余{$item['bikeCount']}</span></a></li>
 				<!-- {/if} -->
 				<!-- {/foreach} -->
 			</ul>
@@ -25,7 +25,7 @@
 			<div data-role="navbar">
 				<ul>
 					<li><a href="#" data-rel="back"
-						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+						class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-back"
 						data-role="button" role="button">返回</a></li>
 				</ul>
 			</div>

@@ -1,0 +1,23 @@
+{include 'adminHeader.html'}
+
+
+<h1>积分明细</h1>
+<table class="table table-hover">
+    <thead>
+        <td>积分</td>
+        <td>原因</td>
+        <td>时间</td>
+    </thead>
+    <tbody>
+        {foreach $scoreRec as $item}
+        <tr>
+            <td>{$item['score']}</td>
+            <td>{$item['reason']}</td>
+            <td>{$item['time']}</td>
+        </tr>
+        {/foreach}
+    </tbody>
+</table>
+</body>
+
+</html>

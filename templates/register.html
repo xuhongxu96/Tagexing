@@ -6,13 +6,14 @@
 	<div data-role="page" id="registerPage">
 		<div data-role="header">
 			<h1>用户认证</h1>
-			<a href="#infoPage"
+			<a href="main.php?a=help" data-ajax="false"
 				class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-info">
-				项目说明 </a>
+				关于我们 </a>
 		</div>
 		<!-- /header -->
 		<div role="main" class="ui-content">
 			<!-- {if $name} -->
+			<h1 style="color:red; text-shadow: 0 0 4px #bbb;">您已成功提交认证信息</h1>
 			<h3>欢迎新用户，请耐心等待认证，或修改内容。</h3>
 			<!-- {if $comment} -->
 			<p style="color:red;">留言：{$comment}</p>
@@ -20,16 +21,11 @@
 			<!-- {else} -->
 			<h3>欢迎新用户，使用前请先认证！</h3>
 			<h4>用户协议</h4>
-			<ol>
-				<li>您……</li>
-				<li>您还要……</li>
-				<li>您必须……</li>
-				<li>出了事你承担</li>
-			</ol>
+			<a href="http://mp.weixin.qq.com/s?__biz=MzAwNDA5MjQzMw==&mid=210028039&idx=1&sn=f381ee54b34670f4c4901b9f4a4997fb#rd">查看用户协议</a>
 			<p>提交认证即代表您同意该协议</p>
 			<!-- {/if} -->
 			<!-- {if not $pic} -->
-			<p style="font-weight: bold; color: #D22;">请从 聊天窗口 发送有效证件照片</p>
+			<p style="font-weight: bold; color: #D22;">请从 聊天窗口 发送学生卡或学生证的照片</p>
 			<!-- {/if} -->
 			<!-- {if $error} -->
 			<h4>错误： {$error}</h4>
@@ -52,7 +48,7 @@
 				<p style="font-weight: bold;">请从 聊天窗口 发送照片修改</p>
 				<img src="{$pic}" style="max-width: 80%;" alt="照片不合法" />
 				<!-- {else} -->
-				<p style="font-weight: bold;">请从 聊天窗口 发送有效证件照片</p>
+				<p style="font-weight: bold;">请从 聊天窗口 发送学生卡或学生证照片</p>
 				<!-- {/if} -->
 				<button type="submit">提交</button>
 			</form>
@@ -81,7 +77,7 @@
 			<div data-role="navbar">
 				<ul>
 					<li><a href="#" data-rel="back"
-						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+						class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-back"
 						data-role="button" role="button">返回</a></li>
 				</ul>
 			</div>
@@ -90,3 +86,4 @@
 
 </body>
 </html>
+			<p style="font-weight: bold; color: #D22;">请从 聊天窗口 发送学生卡学生证的照片</p>

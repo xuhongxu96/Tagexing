@@ -3,7 +3,7 @@
 <head>{include 'library/header.html' title='我要还车'}
 </head>
 <body>
-	<div data-dom-cache="false" data-role="page" id="returnPage">
+	<div data-dom-cache="false" data-role="page" id="returnPage" data-theme="b">
 		<div data-role="header">
 			<h1>我要还车</h1>
 		</div>
@@ -12,10 +12,10 @@
 			<ul data-role="listview" data-inset="true" data-filter="true">
 				<!-- {foreach $stop as $item} -->
 				<!-- {if ($item['stopCount'] - $item['bikeCount']) > 0} -->
-				<li><a href="main.php?a=returnTo&s={$item['ID']}">{$item['name']}<span class="ui-li-count">{$item['stopCount'] - $item['bikeCount']}</span></a></li>
+				<li><a href="main.php?a=returnTo&s={$item['ID']}">{$item['name']}<span class="ui-li-count">车位剩余{$item['stopCount'] - $item['bikeCount']}</span></a></li>
 				<!-- {else} -->
 				<li><a href="#" class="ui-disabled">{$item['name']}<span
-						class="ui-li-count">{$item['stopCount'] - $item['bikeCount']}</span></a></li>
+						class="ui-li-count">车位剩余{$item['stopCount'] - $item['bikeCount']}</span></a></li>
 				<!-- {/if} -->
 				<!-- {/foreach} -->
 			</ul>
@@ -25,7 +25,7 @@
 			<div data-role="navbar">
 				<ul>
 					<li><a href="#" data-rel="back"
-						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+						class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-back"
 						data-role="button" role="button">返回</a></li>
 				</ul>
 			</div>

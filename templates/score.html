@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>{include 'library/header.html' title='积分明细'}
+</head>
+<body>
+	<div data-role="page" id="scorePage" data-theme="c">
+	<div data-role="header">
+			<h1>积分明细</h1>
+		</div>
+		<div role="main" class="ui-content">
+			<ul data-role="listview" data-inset="true">
+				{foreach $scoreRec as $item}
+				<li>积分：{$item['score']}<p>原因：{$item['reason']}</p> <span class="ui-li-count">{$item['time']}</span></li>
+				{/foreach}
+			</ul>
+		</div>
+		<div data-role="footer" style="overflow: hidden;"
+			data-position="fixed" data-tap-toggle="false">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#" data-rel="back"
+						class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-back"
+						data-role="button" role="button">返回</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

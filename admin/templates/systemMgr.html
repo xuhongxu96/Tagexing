@@ -8,8 +8,16 @@
 <a href="index.php?a=setLong&o=1" class="btn btn-default" onclick="return confirm('确定启用活动时期借车时长？');">启用活动时期借车时长</a>
 <!-- {/if} -->
 <a href="index.php?a=newTerm" class="btn btn-warning" onclick="return confirm('确定开始新学期并刷新用户信用值？');">开始新学期并刷新信用值</a>
+<form action="index.php?a=setNotice" method="post" style="margin: 20px;">
+    <div class="form-group">
+        <label for="notice">公示内容</label>
+		<textarea class="form-control" rows="4" id="notice" name="notice">{$notice}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">提交公示内容</button>
+</form>
 </div>
 <!-- /container -->
 
 </body>
+
 </html>

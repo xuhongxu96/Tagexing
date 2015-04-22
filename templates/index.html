@@ -3,14 +3,17 @@
 <head>{include 'library/header.html' title='个人中心'}
 </head>
 <body>
-	<div data-dom-cache="false" data-role="page" id="indexPage">
+	<div data-dom-cache="false" data-role="page" id="indexPage" data-theme="a">
 		<div data-role="header">
 			<h1>个人中心</h1>
-			<a href="#helpPage"
-				class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-star">帮助</a>
+			<a href="main.php?a=help" data-ajax="false"
+				class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-star">关于与帮助</a>
 		</div>
-		<div role="main" class="ui-content">
-			<h3>欢迎 {$userInfo['name']}！</h3>
+		<div data-role="content" class="ui-content" data-theme="a">
+			<h2 style="margin-bottom: 0;">踏鸽行 师大公共自行车</h2>
+			<span style="color: #aaa;margin: 0;">Powered by imall公益</span>
+			<h3 style="margin-top: 18px;">欢迎 {$userInfo['name']}！</h3>
+			<div class="marquee">{$notice}</div>
 			<ul data-role="listview" data-inset="true">
 				<li data-role="list-divider">状态信息</li>
 				<li>状态：{$state}</li>
@@ -32,7 +35,7 @@
 				<li>还车期限：{$returnTime|date_format:"%m-%d %H:%M"}</li>
 				<!-- {/if} -->
 				<li data-role="list-divider">等级信息</li>
-				<li>信用值：{$userInfo['score']}</li>
+				<li><a href="main.php?a=scoreRec&q={$random}">信用值：{$userInfo['score']}{if $change}<span style="color:red;margin-left:4px;">({$change})</span>{/if}</a></li>
 				<li>等级：{$rank['name']}</li>
 				<li>最大借车时长：{$rank['maxTime']} 小时</li>
 				<li>累计时长：{$userInfo['timeAmount']}</li>
@@ -66,34 +69,7 @@
 		</div>
 		<!-- {/if} -->
 	</div>
-	<div data-role="page" id="helpPage">
-		<div data-role="header">
-			<h1>帮助</h1>
-			<a href="#indexPage" data-rel="back"
-				class="ui-btn-left ui-alt-icon ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"
-				data-role="button" role="button">返回</a>
-		</div>
-		<div data-role="ui-content">
-			<div class="ui-bar">
-				<p>我们是踏鸽行 校园公共自行车团队~</p>
-				<p>我们是踏鸽行 校园公共自行车团队~</p>
-				<p>我们是踏鸽行 校园公共自行车团队~</p>
-				<p>我们是踏鸽行 校园公共自行车团队~</p>
-				<p>我们是踏鸽行 校园公共自行车团队~</p>
-				<p>我们是踏鸽行 校园公共自行车团队~</p>
-			</div>
-		</div>
-		<div data-role="footer" style="overflow: hidden;"
-			data-position="fixed" data-tap-toggle="false">
-			<div data-role="navbar">
-				<ul>
-					<li><a href="#" data-rel="back"
-						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
-						data-role="button" role="button">返回</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
 
 </body>
 </html>
+

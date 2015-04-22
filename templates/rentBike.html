@@ -3,13 +3,13 @@
 <head>{include 'library/header.html' title='我要借车'}
 </head>
 <body>
-	<div data-dom-cache="false" data-role="page" id="rentBikePage">
+	<div data-dom-cache="false" data-role="page" id="rentBikePage" data-theme="b">
 		<div data-role="header">
 			<h1>我要借车</h1>
 		</div>
 		<div role="main" class="ui-content">
 			<h3>请选择自行车</h3>
-			<ul data-role="listview" data-inset="true" data-filter="true">
+			<ul data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="搜索">
 				<!-- {foreach $bikes as $item} -->
 				<!-- {if $item['state'] eq 0} -->
 				<li><a href="main.php?a=confirmRent&s={$item['ID']}">{$item['name']}</a></li>
@@ -22,7 +22,7 @@
 			<div data-role="navbar">
 				<ul>
 					<li><a href="#" data-rel="back"
-						class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+						class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-back"
 						data-role="button" role="button">返回</a></li>
 				</ul>
 			</div>

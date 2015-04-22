@@ -66,8 +66,10 @@ class DB {
 			}
 		}
 		if ($ret ['state'] != 0 && $ret ['score'] <= 0) {
+			$this->update("UPDATE tuser SET score = 0 WHERE openid = '$openid'");
+			$ret ['score'] = 0;
 			$ret ['state'] = 3;
-			$ret ['comment'] = "信用值已低于或等于0";
+			$ret ['comment'] = "信用值已为0";
 		}
 		return $ret;
 	}
@@ -89,7 +91,7 @@ class DB {
 		$inviterName = $this->mysqli->real_escape_string ( $inviterName );
 		$inviterMobile = $this->mysqli->real_escape_string ( $inviterMobile );
 		$vip = array (
-				"17888829772" => "1" 
+			"17888829772" => "1" 
 		);
 		$inviter = - 1;
 		if (! array_key_exists ( $mobile, $vip )) {
@@ -102,7 +104,12 @@ class DB {
 		if ($this->query ( "SELECT ID FROM tuser WHERE mobile='$mobile' AND ID != $ID" )) {
 			return "该手机号码已经存在！";
 		}
-		$this->update ( "UPDATE tuser SET score = score + 5 WHERE mobile='$inviterMobile'" );
+		$ret = $this->query("SELECT name FROM tuser WHERE ID = $ID");
+		if ($ret['name']) {
+			return "您已注册！";
+		}
+		$this->update ( "UPDATE tuser SET score = score + 1 WHERE mobile='$inviterMobile'" );
+		$this->update ( "INSERT INTO tscore (userID, score, reason, time) VALUES ($inviter, 1, '成功邀请！', NOW())" );
 		$this->update ( "UPDATE tuser SET name='$name', mobile='$mobile', confirmInfo='$info', inviterID=$inviter, state=0,timeAmount=0 WHERE ID = $ID" );
 	}
 	public function postImg($openid, $img) {
@@ -136,7 +143,7 @@ class DB {
 			$now = new DateTime ( "NOW" );
 			$past = date_diff ( $now, $rentTime );
 			if (interval_to_seconds ( $past ) / 60 < 5) { // 两次借车间隔时间
-				return "quick";
+				return "quick" . (5 - interval_to_seconds ( $past ) / 60);
 			}
 		}
 		$rank = $this->getRank ( $user ['score'] );
@@ -194,13 +201,24 @@ class DB {
 			$rank ['maxTime'] = $rank ['maxTime2'];
 		}
 		$returnTime->add ( new DateInterval ( 'PT' . $rank ['maxTime'] . 'H' ) );
-		$overH = interval_to_seconds ( date_diff ( $now, $returnTime ) ) / 3600;
-		if ($overH . invert)
-			$this->update ( "UPDATE tuser SET state = 1, score = score + 3, timeAmount = timeAmount + " . intval ( interval_to_seconds ( date_diff ( $now, $rentTime ) ) / 60 ) . " WHERE ID = $userID" );
-		else if ($overH <= 24)
+		$diff = date_diff ( $now, $returnTime );
+		$overH = interval_to_seconds ($diff) / 3600;
+		if ($diff->invert == 0) {
+			$this->update ( "UPDATE tuser SET state = 1, score = score + 2, timeAmount = timeAmount + " . intval ( interval_to_seconds ( date_diff ( $now, $rentTime ) ) / 60 ) . " WHERE ID = $userID" );
+			$this->update ( "INSERT INTO tscore (userID, score, reason, time) VALUES ($userID, 2, '及时还车！', NOW())" );
+		}
+		else if ($overH <= 3) {
 			$this->update ( "UPDATE tuser SET state = 1, score = score - 5, timeAmount = timeAmount + " . intval ( interval_to_seconds ( date_diff ( $now, $rentTime ) ) / 60 ) . " WHERE ID = $userID" );
-		else
+			$this->update ( "INSERT INTO tscore (userID, score, reason, time) VALUES ($userID, -5, '还车超时(<3h)', NOW())" );
+		}
+		else if ($overH <= 24){
 			$this->update ( "UPDATE tuser SET state = 1, score = score - 10, timeAmount = timeAmount + " . intval ( interval_to_seconds ( date_diff ( $now, $rentTime ) ) / 60 ) . " WHERE ID = $userID" );
+			$this->update ( "INSERT INTO tscore (userID, score, reason, time) VALUES ($userID, -10, '还车超时(<24h)', NOW())" );
+		} else {
+			$cut = 10 * intval(($overH + 23) / 24);
+			$this->update ( "UPDATE tuser SET state = 1, score = score - $cut, timeAmount = timeAmount + " . intval ( interval_to_seconds ( date_diff ( $now, $rentTime ) ) / 60 ) . " WHERE ID = $userID" );
+			$this->update ( "INSERT INTO tscore (userID, score, reason, time) VALUES ($userID, -$cut, '还车超时(>24h)', NOW())" );
+		}
 		return $pwd;
 	}
 	public function setAccident($userID) {
@@ -210,7 +228,7 @@ class DB {
 		$bikeID = $rent ['bikeID'];
 		return $this->update ( "UPDATE tbike SET state = 2 WHERE ID = $bikeID" );
 	}
-	
+
 	// admin
 	public function adminLogin($username, $password) {
 		$username = $this->mysqli->real_escape_string ( $username );
@@ -293,13 +311,19 @@ class DB {
 			return -1;
 		return $this->update ( "UPDATE tstop SET name = '$name', stopCount = $stopCount, code = '$code' WHERE ID = $id" );
 	}
-	public function editUser($id, $score, $state, $freeTime, $mobile, $cmt) {
+	public function editUser($id, $score, $state, $freeTime, $mobile, $cmt, $editScore) {
 		$id = $this->mysqli->real_escape_string ( $id );
 		$score = $this->mysqli->real_escape_string ( $score );
 		$state = $this->mysqli->real_escape_string ( $state );
 		$freeTime = $this->mysqli->real_escape_string ( $freeTime );
 		$mobile = $this->mysqli->real_escape_string ( $mobile );
 		$cmt = $this->mysqli->real_escape_string ( $cmt );
+		$user = $this->query("SELECT * FROM tuser WHERE ID = $id");
+		if (!$editScore) {
+			$score = $user['score'];
+		}
+		if ($score != $user['score'])
+			$this->update ( "INSERT INTO tscore (userID, score, reason, time) VALUES ($id, " . ($score - $user['score']) . ", '$cmt', NOW())" );
 		if ($this->query ( "SELECT * FROM tuser WHERE mobile = '$mobile' AND id != $id" )) {
 			return "no";
 		}
