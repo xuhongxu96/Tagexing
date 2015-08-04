@@ -4,3 +4,4 @@ templates_c/
 .buildpath
 .project
 *.swp
+config.php
