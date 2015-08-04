@@ -15,13 +15,16 @@
 			<h3 style="margin-top: 18px;">欢迎 {$userInfo['name']}！</h3>
 			<div class="marquee">{$notice}</div>
 			<ul data-role="listview" data-inset="true">
+				{if $userInfo['comment']}
+				<li style="font-size: 1.1em;color: black;text-shadow:0 0 4px red;">{$userInfo['comment']}</li>
+				{/if}
 				<li data-role="list-divider">状态信息</li>
 				<li>状态：{$state}</li>
 				<!-- {if $userInfo['comment']} -->
-				<li>留言：{$userInfo['comment']}</li>
 				<!-- {/if} -->
 				<!-- {if $userInfo['state'] eq 1 and $pwd} -->
-				<li>锁车密码：{$pwd}</li>
+				<li>开锁密码：{$oldpwd}</li>
+				<li style="color:red;">锁车密码：{$pwd}</li>
 				<!-- {else if $userInfo['state'] eq 2} -->
 				<li>开锁密码：{$rentInfo['unlockPWD']}</li>
 				<!-- {if $over} -->

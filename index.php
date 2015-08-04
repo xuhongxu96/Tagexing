@@ -2,36 +2,13 @@
 require_once 'config.php';
 require_once 'db.php';
 require_once 'wechat.class.php';
+include_once 'function.php';
 include 'emoji.php';
-function utf8_bytes($cp){
 
-	if ($cp > 0x10000){
-		# 4 bytes
-		return	chr(0xF0 | (($cp & 0x1C0000) >> 18)).
-			chr(0x80 | (($cp & 0x3F000) >> 12)).
-			chr(0x80 | (($cp & 0xFC0) >> 6)).
-			chr(0x80 | ($cp & 0x3F));
-	}else if ($cp > 0x800){
-		# 3 bytes
-		return	chr(0xE0 | (($cp & 0xF000) >> 12)).
-			chr(0x80 | (($cp & 0xFC0) >> 6)).
-			chr(0x80 | ($cp & 0x3F));
-	}else if ($cp > 0x80){
-		# 2 bytes
-		return	chr(0xC0 | (($cp & 0x7C0) >> 6)).
-			chr(0x80 | ($cp & 0x3F));
-	}else{
-		# 1 byte
-		return chr($cp);
-	}
-}
-function logdebug($n) {
-	file_put_contents("1.txt", time()."\n".$n."\n", FILE_APPEND);
-}
 $options = array (
 	'token' => WX_TOKEN, // 填写应用接口的Token
 	'appid' => WX_APPID, // 填写高级调用功能的appid
-	'encodingaeskey' => '6pnP7qHyqJ1kFXMjuO4Z3QrpOa9WfapsgkPOtXoZKC2',
+	'encodingaeskey' => WX_KEY,
 	'appsecret' => WX_SECRET,
 	'logcallback' => logdebug
 	//'debug' => true
@@ -54,7 +31,7 @@ case Wechat::MSGTYPE_IMAGE :
 	if ($userInfo['state'] != 0) {
 		$weObj->text ( "你已经通过认证！" )->reply ();
 	} else {
-		$db->postImg ( $weObj->getRevFrom (), $pic ['picurl'] );
+		$db->postImg ( $weObj->getRevFrom (), $pic ['mediaid'] );
 		if ($userInfo['pic']) {
 			$weObj->text ( "成功修改证件照片！" )->reply ();
 		} else {
@@ -73,13 +50,11 @@ case Wechat::MSGTYPE_EVENT :
 		$scan = $weObj->getRevSceneId ();
 		if (ereg("^[0-9]+$", $scan)) {
 			$weObj->text ( "欢迎新用户来到imall 公益电商平台 和" . WX_TITLE . " 校园公共自行车服务！\n\n在借车前请先提交认证信息，等我们确认您的身份后即可享受校园公共自行车服务了~\n\n<a href='http://www.imall365.org'>点此开始imall公益电商之旅！</a>\n<a href='" . $authURI . "'>点此开始你的" . WX_TITLE . "！</a>" )->reply ();
-		} else if (substr($scan, 0, 5) == 'prize') {
+		} else if (substr($scan, 0, 5) == 'prizea') {
 			$redirectURI3 = urlencode ( "http://" . WX_URL . "/main.php?a=prize" );
 			$authURI3 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . WX_APPID . "&redirect_uri=" . $redirectURI3 . "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
 			$weObj->text ("欢迎新用户来到imall 公益电商平台 和" . WX_TITLE . " 校园公共自行车服务！\n\n在借车前请先提交认证信息，等我们确认您的身份后即可享受校园公共自行车服务了~\n\n<a href='http://www.imall365.org'>点此开始imall公益电商之旅！</a>\n<a href='" . $authURI . "'>点此开始你的" . WX_TITLE . "！</a>\n\n"."<a href='$authURI3'>点此抽奖~</a>")->reply();
 		} else {
-			$redirectURI3 = urlencode ( "http://" . WX_URL . "/main.php?a=prize" );
-			$authURI3 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . WX_APPID . "&redirect_uri=" . $redirectURI3 . "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
 			$weObj->text ("欢迎新用户来到imall 公益电商平台 和" . WX_TITLE . " 校园公共自行车服务！\n\n在借车前请先提交认证信息，等我们确认您的身份后即可享受校园公共自行车服务了~\n\n<a href='http://www.imall365.org'>点此开始imall公益电商之旅！</a>\n<a href='" . $authURI . "'>点此开始你的" . WX_TITLE . "！</a>")->reply();
 			//$weObj->text ( "你好，欢迎来到imall 公益电商平台 和" . WX_TITLE . " 校园公共自行车服务！\n\n<a href='http://www.imall365.org'>点此开始imall公益电商之旅！</a>\n<a href='" . $authURI . "'>点此开始你的" . WX_TITLE . "！</a>" )->reply ();
 		}
@@ -107,7 +82,7 @@ case Wechat::MSGTYPE_EVENT :
 				$weObj->text ( "您目前处于被禁用状态！\n\n<a href='" . $authURI . "'>点此查看原因</a>" )->reply ();
 				break;
 			}
-		} else if (substr($scan, 0, 5) == "prize") {
+		} else if (substr($scan, 0, 5) == "prizea") {
 			// Prize
 			$redirectURI3 = urlencode ( "http://" . WX_URL . "/main.php?a=prize" );
 			$authURI3 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . WX_APPID . "&redirect_uri=" . $redirectURI3 . "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";

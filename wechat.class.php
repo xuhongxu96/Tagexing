@@ -1544,6 +1544,19 @@ class Wechat
 	}
 
 	/**
+	 * 获取临时素材URL(认证后的订阅号可用)
+	 * @param string $media_id 媒体文件id
+	 * @param boolean $is_video 是否为视频文件，默认为否
+	 * @return raw data
+	 */
+	public function getMediaURL($media_id,$is_video=false){
+		if (!$this->access_token && !$this->checkAuth()) return false;
+		//原先的上传多媒体文件接口使用 self::UPLOAD_MEDIA_URL 前缀
+		//如果要获取的素材是视频文件时，不能使用https协议，必须更换成http协议
+		$url_prefix = $is_video?str_replace('https','http',self::API_URL_PREFIX):self::API_URL_PREFIX;
+		return $url_prefix.self::MEDIA_GET_URL.'access_token='.$this->access_token.'&media_id='.$media_id;
+	}
+	/**
 	 * 获取临时素材(认证后的订阅号可用)
 	 * @param string $media_id 媒体文件id
 	 * @param boolean $is_video 是否为视频文件，默认为否

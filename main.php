@@ -11,6 +11,19 @@ $openid = '';
 $smarty = new Smarty ();
 $db = new DB ();
 $db->connect ();
+
+$options = array (
+	'token' => WX_TOKEN, // 填写应用接口的Token
+	'appid' => WX_APPID, // 填写高级调用功能的appid
+	'encodingaeskey' => '6pnP7qHyqJ1kFXMjuO4Z3QrpOa9WfapsgkPOtXoZKC2',
+	'appsecret' => WX_SECRET
+	//'debug' => true
+);
+
+$weObj = new Wechat ( $options );
+//$weObj->valid ();
+$weObj->checkAuth ();
+
 $smarty->assign ( "random", rand ( 0, 10000000 ) );
 function showError($smarty, $error, $db) {
 	$smarty->assign ( 'error', $error );
@@ -40,9 +53,9 @@ function showTip($smarty, $tip, $db, $title) {
 	die ();
 }
 if (WX_DEBUG == '2') {
-	//$openid = "xuhongxu96justforfun";
+	$openid = "hahahahahaha1";
 	//$openid = "new";
-	$openid = "oEdAOs55CpwYMGC5EI3IY8O_T74k";
+	//$openid = "oEdAOs55CpwYMGC5EI3IY8O_T74k";
 } else {
 	if (! isset ( $_GET ['code'] ) && ! isset ( $_SESSION ['openid'] )) { // 未进行微信OAuth2.0认证
 		showError ( $smarty, '请通过微信公众号进入踏鸽行操作页面！', $db );
@@ -62,9 +75,9 @@ if (WX_DEBUG == '2') {
 }
 
 $smarty->assign ( "error", "" );
-function showRegister($smarty, $userInfo, $db) {
+function showRegister($smarty, $userInfo, $db, $wechat) {
 	$smarty->assign ( 'name', $userInfo ['name'] );
-	$smarty->assign ( 'pic', $userInfo ['pic'] );
+	$smarty->assign ( 'pic', $wechat->getMediaURL($userInfo ['pic']) );
 	$smarty->assign ( 'info', $userInfo ['confirmInfo'] );
 	$smarty->assign ( 'mobile', $userInfo ['mobile'] );
 	$smarty->assign ( 'comment', $userInfo ['comment'] );
@@ -95,8 +108,10 @@ function showIndex($smarty, $userInfo, $db) {
 	$rank = $db->getRank ( $userInfo ['score'] );
 	$ret = $db->getCache("LongTimeEnabled");
 	$scoreChange = $db->query("SELECT score FROM tscore WHERE userID = " . $userInfo['ID'] . " ORDER BY ID DESC LIMIT 1");
-	if ($scoreChange['score'] > 0) $scoreChange['score'] = "+" . $scoreChange['score'];
-	else if ($scoreChange['score'] = 0) $scoreChange['score'] = "";
+	if ($scoreChange) {
+		if ($scoreChange['score'] > 0) $scoreChange['score'] = "+" . $scoreChange['score'];
+		else if ($scoreChange['score'] == 0) $scoreChange['score'] = "";
+	}
 	$smarty->assign("change", $scoreChange['score']);
 	if ($ret['value']){
 		$rank['maxTime'] = $rank['maxTime2'];
@@ -109,11 +124,13 @@ function showIndex($smarty, $userInfo, $db) {
 	case 1 :
 		$rent = $db->getAllByID ( "trent", $userInfo ['rentID'] );
 		$smarty->assign ( "pwd", "" );
+		$smarty->assign ( "oldpwd", "" );
 		if ($rent && $rent['brokenType'] == 0) {
 			$now = new DateTime ( "NOW" );
 			$returnTime = new DateTime ( $rent ['returnTime'] );
 			if (interval_to_seconds(date_diff ( $now, $returnTime )) / 60 <= CONFIG_PWD_EXPIRED) {
 				$smarty->assign ( "pwd", $rent ['lockPWD'] );
+				$smarty->assign ( "oldpwd", $rent ['unlockPWD'] );
 			}
 		}
 		$smarty->assign ( "state", "待借车" );
@@ -164,7 +181,11 @@ function showRentBike($smarty, $userInfo, $db) {
 	die ();
 }
 function showConfirmRent($smarty, $userInfo, $db) {
-	$smarty->assign ( "bike", $db->getAllByID ( "tbike", $_GET ['s'] ) );
+	$bikeinfo = $db->getAllByID ( "tbike", $_GET ['s'] );
+	if ($bikeinfo['state'] != 0) {
+		showError ( $smarty, "该车待修，暂时不能借出！", $db );
+	}
+	$smarty->assign ( "bike",  $bikeinfo);
 	$smarty->assign('back', isset($_GET['back']));
 	$smarty->display ( 'templates/confirmRent.html' );
 	$db->disconnect ();
@@ -222,7 +243,7 @@ define("OTP_ERR_REPLAY",0x00000004);//动态口令被重放
 
 function test_auth($authkey, $db, $code)
 {
-	if (WX_DEBUG == 3) return true;
+	if (WX_DEBUG == 2) return true;
 	if (function_exists('et_checkpwdz201'))
 	{
 		$t = time();
@@ -312,7 +333,7 @@ case 0 : // not registered
 	switch ($_GET ['a']) {
 	case 'index' :
 	default :
-		showRegister ( $smarty, $userInfo, $db );
+		showRegister ( $smarty, $userInfo, $db, $weObj );
 		break;
 	case 'register' :
 		$msg = "";
@@ -321,7 +342,7 @@ case 0 : // not registered
 		}
 		$smarty->assign ( "error", $msg );
 		$userInfo = $db->getInfo ( $openid );
-		showRegister ( $smarty, $userInfo, $db );
+		showRegister ( $smarty, $userInfo, $db, $weObj );
 		break;
 	}
 	break;
@@ -409,7 +430,7 @@ case 0 : // not registered
 				}
 				break;
 			case 'accident' :
-				showTip ( $smarty, "<p>请联系志愿者：</p><p>17888829772-许宏旭</p><p>联系后，请仍然将车子归还到任意车站！</p><p>确定上报后，车辆会被标记为需要维修！</p><a class='ui-btn' href='main.php?a=confirmAccident&q=" . rand ( 1, 10000000 ) . "'>确定上报</a>", $db );
+				showTip ( $smarty, "<p>请联系志愿者：</p><p>18964087795 - 费思量/18401654098 - 张立鹏</p><p>联系后，请仍然将车子归还到任意车站！</p><p>确定上报后，车辆会被标记为需要维修！</p><a class='ui-btn' href='main.php?a=confirmAccident&q=" . rand ( 1, 10000000 ) . "'>确定上报</a>", $db );
 				break;
 			case 'confirmAccident' :
 				$db->setAccident ( $userInfo ['ID'] );
@@ -424,4 +445,3 @@ case 0 : // not registered
 
 $db->disconnect ();
 ?>
-			showTip($smarty, "您已经参与过了~", $db, "imall 抽奖活动并在16 17日邱季端南外场领取。");

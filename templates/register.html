@@ -14,10 +14,10 @@
 		<div role="main" class="ui-content">
 			<!-- {if $name} -->
 			<h1 style="color:red; text-shadow: 0 0 4px #bbb;">您已成功提交认证信息</h1>
-			<h3>欢迎新用户，请耐心等待认证，或修改内容。</h3>
 			<!-- {if $comment} -->
-			<p style="color:red;">留言：{$comment}</p>
+			<p style="color:red;font-size: 1.5em;text-shadow: 0 0 4px #bbb;">志愿者提醒您：{$comment}</p>
 			<!-- {/if} -->
+			<h3>欢迎新用户，请耐心等待认证，或修改内容。</h3>
 			<!-- {else} -->
 			<h3>欢迎新用户，使用前请先认证！</h3>
 			<h4>用户协议</h4>
@@ -36,13 +36,13 @@
 					id="name" placeholder="张三" value="{$name}" /> <label for="mobile">手机号：</label>
 				<input type="tel" name="mobile" id="mobile"
 					placeholder="17888888888" value="{$mobile}" /> <label
-					for="inviterName">邀请人姓名：</label> <input type="text"
+					for="inviterName">邀请人姓名（非必需）：</label> <input type="text"
 					name="inviterName" id="inviterName" placeholder="李四"
-					value="{$inviterName}" /> <label for="inviterMobile">邀请人手机号：</label>
+					value="{$inviterName}" /> <label for="inviterMobile">邀请人手机号（非必需）：</label>
 				<input type="tel" name="inviterMobile" id="inviterMobile"
 					placeholder="17666666666" value="{$inviterMobile}" /> <label
 					for="info">认证个人陈述：</label>
-				<textarea id="info" name="info" placeholder="这个项目真不错，我很感兴趣，请同意我加入！"
+				<textarea id="info" name="info" placeholder="这个项目真不错，我很感兴趣，请同意我申请！"
 					cols="" rows="">{$info}</textarea>
 				<!-- {if $pic} -->
 				<p style="font-weight: bold;">请从 聊天窗口 发送照片修改</p>
@@ -86,4 +86,3 @@
 
 </body>
 </html>
-			<p style="font-weight: bold; color: #D22;">请从 聊天窗口 发送学生卡学生证的照片</p>

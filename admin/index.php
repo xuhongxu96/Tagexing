@@ -35,6 +35,15 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 	switch ($_GET ['a']) {
 	case 'index' :
 	default :
+		$smarty->assign("adminCount", $db->query("SELECT COUNT(*) FROM tadmin")['COUNT(*)']);
+		$smarty->assign("bikeCount", $db->query("SELECT COUNT(*) FROM tbike")['COUNT(*)']);
+		$smarty->assign("breakBike", $db->query("SELECT COUNT(*) FROM tbike WHERE state != 0 and state != 1")['COUNT(*)']);
+		$smarty->assign("times", $db->query("SELECT COUNT(*) FROM trent")['COUNT(*)']);
+		$smarty->assign("stopCount", $db->query("SELECT COUNT(*) FROM tstop")['COUNT(*)']);
+		$smarty->assign("userCount", $db->query("SELECT COUNT(*) FROM tuser WHERE name != ''")['COUNT(*)']);
+		$smarty->assign("newUser", $db->query("SELECT COUNT(*) FROM tuser WHERE name != '' and state = 0")['COUNT(*)']);
+		$smarty->assign("rentingUser", $db->query("SELECT COUNT(*) FROM tuser WHERE name != '' and state = 2")['COUNT(*)']);
+		$smarty->assign("disabledUser", $db->query("SELECT COUNT(*) FROM tuser WHERE name != '' and state = 3")['COUNT(*)']);
 		$smarty->display ( "index.html" );
 		break;
 	case 'adminMgr' :
@@ -97,6 +106,11 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 		if ($ret == -1) {
 			echo "Name has been used!";
 		} else {
+			if ($_POST['id'] == -1) {
+				$db->adminLog($admin ['ID'], "添加志愿者：" . $_POST['name'] . " 密码：" . $_POST['pwd'] . " 权限：" . $limit);
+			} else {
+				$db->adminLog($admin ['ID'], "编辑志愿者：" . $_POST['name'] . " 密码：" . $_POST['pwd'] . " 权限：" . $limit);
+			}
 			header ( "location: index.php?a=adminMgr" );
 		}
 		break;
@@ -109,7 +123,9 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			header ( "location: index.php?a=index" );
 			break;
 		}
+		$name = $db->query("SELECT * FROM tadmin WHERE ID = " . $_GET['id'])['name'];
 		$db->update ( "DELETE FROM tadmin WHERE ID = " . $_GET ['id'] );
+		$db->adminLog($admin ['ID'], "删除志愿者：$name");
 		header ( "location: index.php?a=adminMgr" );
 		break;
 	case 'bikeMgr' :
@@ -173,6 +189,11 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 		if ($ret == -1) {
 			echo "Name has been used!";
 		} else {
+			if ($_POST['id'] == -1) {
+				$db->adminLog($admin ['ID'], "添加自行车：" . $_POST['name'] . " 密码：" . $_POST['pwd'] . " 状态：" . $_POST['state'] . " 车站ID：" . $_POST['stop']);
+			} else {
+				$db->adminLog($admin ['ID'], "编辑自行车：" . $_POST['name'] . " 密码：" . $_POST['pwd'] . " 状态：" . $_POST['state'] . " 车站ID：" . $_POST['stop']);
+			}
 			header ( "location: index.php?a=bikeMgr" );
 		}
 		break;
@@ -185,7 +206,9 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			header ( "location: index.php?a=index" );
 			break;
 		}
+		$name = $db->query("SELECT * FROM tbike WHERE ID = " . $_GET['id'])['name'];
 		$db->update ( "DELETE FROM tbike WHERE ID = " . $_GET ['id'] );
+		$db->adminLog($admin ['ID'], "删除自行车：$name");
 		$db->refreshStopInfo ();
 		header ( "location: index.php?a=bikeMgr" );
 		break;
@@ -239,8 +262,10 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 		}
 		if ($_POST ['id'] == - 1) {
 			$db->addRank ( $_POST ['name'], $_POST ['minScore'], $_POST ['maxTime'], $_POST ['maxTime2'] );
+			$db->adminLog($admin ['ID'], "添加等级：" . $_POST['name'] . " 最低分值：" . $_POST['minScore'] . " 最大借车时长：" . $_POST['maxTime'] . "/" . $_POST['maxTime2']);
 		} else {
 			$db->editRank ( $_POST ['id'], $_POST ['name'], $_POST ['minScore'], $_POST ['maxTime'], $_POST ['maxTime2'] );
+			$db->adminLog($admin ['ID'], "编辑等级：" . $_POST['name'] . " 最低分值：" . $_POST['minScore'] . " 最大借车时长：" . $_POST['maxTime'] . "/" . $_POST['maxTime2']);
 		}
 		header ( "location: index.php?a=rankMgr" );
 		break;
@@ -253,8 +278,9 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			header ( "location: index.php?a=index" );
 			break;
 		}
+		$name = $db->query("SELECT * FROM trank WHERE ID = " . $_GET['id'])['name'];
 		$db->update ( "DELETE FROM trank WHERE ID = " . $_GET ['id'] );
-		$db->refreshStopInfo ();
+		$db->adminLog($admin['ID'], "删除等级：$name");
 		header ( "location: index.php?a=rankMgr" );
 		break;
 	case 'rentMgr' :
@@ -286,6 +312,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			echo "Please submit properly!";
 			break;
 		}
+		$db->adminLog($admin['ID'], "编辑借车信息ID：" . $_POST['id'] . " 备注：" . $_POST['cmt']);
 		$db->editRent ( $_POST ['id'], $_POST ['cmt'] );
 		break;
 	case 'stopMgr' :
@@ -336,7 +363,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			break;
 		}
 		$ret = 0;
-		if ($_POST ['id'] == - 1) {
+		if ($_POST ['id'] == -1) {
 			$ret = $db->addStop ( $_POST ['name'], $_POST ['stopCount'], $_POST ['code'] );
 		} else {
 			$ret = $db->editStop ( $_POST ['id'], $_POST ['name'], $_POST ['stopCount'], $_POST ['code'] );
@@ -344,6 +371,11 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 		if ($ret == -1) {
 			echo "Name has been used!";
 		} else {
+			if ($_POST['id'] == -1) {
+				$db->adminLog($admin ['ID'], "添加车站：" . $_POST['name'] . " 容纳量：" . $_POST['stopCount'] . " 动态码序列号：" . $_POST['code']);
+			} else {
+				$db->adminLog($admin ['ID'], "编辑车站：" . $_POST['name'] . " 容纳量：" . $_POST['stopCount'] . " 动态码序列号：" . $_POST['code']);
+			}
 			header ( "location: index.php?a=stopMgr" );
 		}
 		break;
@@ -356,8 +388,10 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			header ( "location: index.php?a=index" );
 			break;
 		}
+		$name = $db->query("SELECT * FROM tstop WHERE ID = " . $_GET['id'])['name'];
 		$db->update ( "DELETE FROM tstop WHERE ID = " . $_GET ['id'] );
 		$db->refreshStopInfo ();
+		$db->adminLog($admin['ID'], "删除车站：$name");
 		header ( "location: index.php?a=stopMgr" );
 		break;
 	case 'userMgr' :
@@ -375,7 +409,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			$all = $db->query ( "SELECT COUNT(*) FROM tuser WHERE name != ''" );
 			$smarty->assign ( "index", $_GET ['i'] );
 			$smarty->assign ( "page", ceil ( $all ['COUNT(*)'] / 20 ) );
-			$user = $db->queryAll ( "SELECT *, (SELECT CONCAT(t.name,t.mobile) FROM tuser AS t WHERE t.ID = t1.inviterID) AS inviter FROM tuser AS t1 WHERE	name != '' ORDER BY state LIMIT " . $_GET ['i'] * 20 . ", 20" );
+			$user = $db->queryAll ( "SELECT *, (SELECT CONCAT(t.name,t.mobile) FROM tuser AS t WHERE t.ID = t1.inviterID) AS inviter FROM tuser AS t1 WHERE	name != '' ORDER BY locate(state, '0,3,2,1') ASC , ID DESC LIMIT " . $_GET ['i'] * 20 . ", 20" );
 			$smarty->assign ( "users", $user );
 		}
 
@@ -394,6 +428,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			echo "Mobile has been used!";
 			break;
 		}
+		$db->adminLog($admin['ID'], "编辑用户ID：" . $_POST['id'] . " 信用值：" . $_POST['score'] . " 状态：" . $_POST['state'] . " 解禁时间：" . $_POST['freeTime'] . " 手机号：" . $_POST['mobile'] . " 备注：" . $_POST['cmt']);
 		break;
 	case 'systemMgr' :
 		if (! ($admin ['limit'] & 64)) {
@@ -414,6 +449,10 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			break;
 		}
 		$db->setCache("LongTimeEnabled", $_GET['o'], -1);
+		if ($_GET['o'])
+			$db->adminLog($admin['name'], "开启长时");
+		else
+			$db->adminLog($admin['name'], "关闭长时");
 		header("location: index.php?a=systemMgr");
 		break;
 	case 'newTerm':
@@ -422,6 +461,7 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 			break;
 		}
 		$db->update("UPDATE tuser SET score = 40 WHERE score <= 0 AND state != 0");
+		$db->adminLog($admin['name'], "开启新学期");
 		header("location: index.php?a=systemMgr");
 		break;
 	case 'scoreRec':
@@ -430,7 +470,22 @@ if ($admin = $db->adminLogin ( $_POST ['username'], $_POST ['password'] )) {
 		break;
 	case 'setNotice':
 		$db->setCache("notice", $_POST['notice'], -1);
+		$db->adminLog($admin['name'], "编辑公告：" . $_POST['notice']);
 		header("location: index.php?a=systemMgr");
+		break;
+	case 'log':
+		if (! ($admin ['limit'] & 32)) {
+			echo "Permission denied!";
+			break;
+		}
+		if (! isset ( $_GET ['i'] ))
+			$_GET ['i'] = 0;
+		$all = $db->query ( "SELECT COUNT(*) FROM tlog" );
+		$smarty->assign ( "index", $_GET ['i'] );
+		$smarty->assign ( "page", ceil ( $all ['COUNT(*)'] / 20 ) );
+		$smarty->assign ( "logs", $db->queryAll ( "SELECT * FROM tlog ORDER BY ID DESC LIMIT " . $_GET ['i'] * 20 . ", 20" ) );
+		$smarty->display ( "logs.html" );
+		break;
 		break;
 	}
 } else {

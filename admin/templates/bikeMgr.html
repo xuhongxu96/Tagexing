@@ -31,7 +31,7 @@
 		</thead>
 		<tbody>
 			<!-- {foreach $bikes as $item} -->
-			<tr>
+			<tr {if $item['state'] eq 2 or $item['state'] eq 3} class="warning"{/if}>
 				<td>{$item['ID']}</td>
 				<td>{$item['name']}</td>
 				<td><!-- {if $item['rentID']} --><a href="index.php?a=rentMgr&index={$item['rentID']}">查看(ID:{$item['rentID']})</a><!-- {/if} --></td>

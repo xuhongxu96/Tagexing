@@ -96,17 +96,18 @@ class DB {
 		$inviter = - 1;
 		if (! array_key_exists ( $mobile, $vip )) {
 			$inviter = $this->query ( "SELECT ID FROM tuser WHERE mobile='$inviterMobile' AND name='$inviterName' AND state != 0 AND score >= 40" );
-			if ($inviter == 0) {
-				return "邀请人信息错误！";
-			}
-			$inviter = $inviter ["ID"];
+			//if ($inviter == 0) {
+				//return "邀请人信息错误！";
+			//}
+			if ($inviter)
+				$inviter = $inviter ["ID"];
 		}
 		if ($this->query ( "SELECT ID FROM tuser WHERE mobile='$mobile' AND ID != $ID" )) {
 			return "该手机号码已经存在！";
 		}
 		$ret = $this->query("SELECT name FROM tuser WHERE ID = $ID");
 		if ($ret['name']) {
-			return "您已注册！";
+			return ;
 		}
 		$this->update ( "UPDATE tuser SET score = score + 1 WHERE mobile='$inviterMobile'" );
 		$this->update ( "INSERT INTO tscore (userID, score, reason, time) VALUES ($inviter, 1, '成功邀请！', NOW())" );
@@ -331,5 +332,8 @@ class DB {
 			return $this->update ( "UPDATE tuser SET score= $score, state=$state, freeTime = '$freeTime', mobile = '$mobile', comment = '$cmt' WHERE ID = $id" );
 		else
 			return $this->update ( "UPDATE tuser SET score= $score, state=$state, freeTime = null, mobile = '$mobile', comment = '$cmt' WHERE ID = $id" );
+	}
+	public function adminLog($adminID, $log) {
+		$this->update("INSERT INTO tlog (adminID, log, time) VALUES ($adminID, '$log', NOW())");
 	}
 }

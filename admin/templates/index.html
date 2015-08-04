@@ -1,10 +1,49 @@
 {include 'adminHeader.html'}
 <div class="jumbotron">
-		<h1>这是后台，你懂吗，后台！</h1>
-		<p>责任重大，你真的懂么...</p>
-	</div>
+    <h1>这是后台，你懂吗，后台！</h1>
+    <p>责任重大，你真的懂么...</p>
+	<table class="table">
+		<tr>
+			<td>志愿者数量</td>
+			<td>{$adminCount}</td>
+		</tr>
+		<tr>
+			<td>自行车数量</td>
+			<td>{$bikeCount}</td>
+		</tr>
+		<tr {if $breakBike}class="warning"{/if}>
+			<td>待修和待转移车辆</td>
+			<td>{$breakBike}</td>
+		</tr>
+		<tr>
+			<td>借车次数</td>
+			<td>{$times}</td>
+		</tr>
+		<tr>
+			<td>车站数</td>
+			<td>{$stopCount}</td>
+		</tr>
+		<tr>
+			<td>用户数量</td>
+			<td>{$userCount}</td>
+		</tr>
+		<tr {if $newUser}class="danger"{/if}>
+			<td>待审核用户</td>
+			<td>{$newUser}</td>
+		</tr>
+		<tr>
+			<td>借车中用户</td>
+			<td>{$rentingUser}</td>
+		</tr>
+		<tr>
+			<td>禁用用户</td>
+			<td>{$disabledUser}</td>
+		</tr>
+	</table>
+</div>
 </div>
 <!-- /container -->
 
 </body>
+
 </html>

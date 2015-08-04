@@ -40,7 +40,7 @@
 		</thead>
 		<tbody>
 			<!-- {foreach $rent as $item} -->
-			<tr>
+			<tr {if $item['brokenInfo'] neq 0}class="danger"{/if}>
 				<td>{$item['ID']}</td>
 				<td>{$item['bikeName']}</td>
 				<td><a href="index.php?a=userMgr&index={$item['userID']}">{$item['userName']}</a></td>
