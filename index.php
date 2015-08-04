@@ -2,7 +2,7 @@
 require_once 'config.php';
 require_once 'db.php';
 require_once 'wechat.class.php';
-include_once 'function.php';
+require_once 'function.php';
 include 'emoji.php';
 
 $options = array (
@@ -10,7 +10,7 @@ $options = array (
 	'appid' => WX_APPID, // 填写高级调用功能的appid
 	'encodingaeskey' => WX_KEY,
 	'appsecret' => WX_SECRET,
-	'logcallback' => logdebug
+	//'logcallback' => logdebug,
 	//'debug' => true
 );
 

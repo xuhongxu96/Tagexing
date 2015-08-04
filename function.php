@@ -2,6 +2,7 @@
 function logdebug($text){
 	file_put_contents('../data/log.txt',$text."\n",FILE_APPEND);		
 }
+
 function interval_to_seconds($ti)
 {
 	return ($ti->y * 365 * 24 * 60 * 60) +
